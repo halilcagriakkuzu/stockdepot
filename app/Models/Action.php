@@ -10,6 +10,12 @@ class Action extends Model
 {
     use HasFactory;
 
+    const TYPE_RENT_TO_COMPANY = 1;
+    const TYPE_RENT_BACK_FROM_COMPANY_TO_DEPOT = 2;
+    const TYPE_RENT_BACK_FROM_COMPANY_TO_MAINTENANCE = 3;
+    const TYPE_SEND_TO_MAINTENANCE_FROM_DEPOT = 4;
+    const TYPE_MARK_AS_DISABLED = 5;
+
     /**
      * The attributes that are mass assignable.
      *

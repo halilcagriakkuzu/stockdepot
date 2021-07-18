@@ -41,8 +41,8 @@
                 <div class="navbar-search-block">
                     <form class="form-inline">
                         <div class="input-group input-group-sm">
-                            <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                                   aria-label="Search">
+                            <input class="form-control form-control-navbar" type="search" placeholder="Ara"
+                                   aria-label="Ara">
                             <div class="input-group-append">
                                 <button class="btn btn-navbar" type="submit">
                                     <i class="fas fa-search"></i>
@@ -96,8 +96,8 @@
             <!-- SidebarSearch Form -->
             <div class="form-inline">
                 <div class="input-group" data-widget="sidebar-search">
-                    <input class="form-control form-control-sidebar" type="search" placeholder="Search"
-                           aria-label="Search">
+                    <input class="form-control form-control-sidebar" type="search" placeholder="Ara"
+                           aria-label="Ara">
                     <div class="input-group-append">
                         <button class="btn btn-sidebar">
                             <i class="fas fa-search fa-fw"></i>
@@ -120,7 +120,7 @@
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-chart-pie"></i>
+                            <i class="nav-icon fas fa-warehouse"></i>
                             <p>
                                 Depolar
                                 <i class="right fas fa-angle-left"></i>
@@ -129,19 +129,19 @@
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
+                                    <i class="fas fa-microphone nav-icon"></i>
                                     <p>Ses Depo</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
+                                    <i class="fas fa-camera nav-icon"></i>
                                     <p>Kamera Depo</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
+                                    <i class="fas fa-tools nav-icon"></i>
                                     <p>Ölçü/Bakım</p>
                                 </a>
                             </li>
@@ -149,7 +149,7 @@
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-chart-pie"></i>
+                            <i class="nav-icon fas fa-business-time"></i>
                             <p>
                                 Kiralamalar
                                 <i class="right fas fa-angle-left"></i>
@@ -158,19 +158,19 @@
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
+                                    <i class="fas fa-plus-circle nav-icon"></i>
                                     <p>Yeni Kiralama</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
+                                    <i class="fas fa-clipboard-check nav-icon"></i>
                                     <p>Aktif Kiralamalar</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
+                                    <i class="fas fa-clipboard nav-icon"></i>
                                     <p>Geçmiş Kiralamalar</p>
                                 </a>
                             </li>
@@ -179,25 +179,31 @@
                     <li class="nav-header">Yönetim</li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
-                            <i class="nav-icon far fa-calendar-alt"></i>
+                            <i class="nav-icon fas fa-user-cog"></i>
+                            <p>Kullanıcılar</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-warehouse"></i>
                             <p>Depolar</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
-                            <i class="nav-icon far fa-calendar-alt"></i>
+                            <i class="nav-icon fas fa-folder-open"></i>
                             <p>Kategoriler</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
-                            <i class="nav-icon far fa-calendar-alt"></i>
+                            <i class="nav-icon fas fa-box-open"></i>
                             <p>Malzemeler</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
-                            <i class="nav-icon far fa-calendar-alt"></i>
+                            <i class="nav-icon fas fa-building"></i>
                             <p>Firmalar</p>
                         </a>
                     </li>

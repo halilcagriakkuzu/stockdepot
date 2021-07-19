@@ -178,7 +178,7 @@
                     </li>
                     <li class="nav-header">Yönetim</li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ url('/users') }}" class="nav-link">
                             <i class="nav-icon fas fa-user-cog"></i>
                             <p>Kullanıcılar</p>
                         </a>

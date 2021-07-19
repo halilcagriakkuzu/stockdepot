@@ -160,6 +160,11 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'email' => 'Eposta',
+        'password' => 'Parola',
+        'name' => 'İsim',
+        'new-password' => 'Yeni parola',
+    ],
 
 ];

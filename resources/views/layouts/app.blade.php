@@ -271,6 +271,11 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
+                @if(Session::has('success'))
+                    <div class="alert alert-success">
+                        {{ Session::get('success')}}
+                    </div>
+                @endif
                 @yield('content')
             </div>
         </section>

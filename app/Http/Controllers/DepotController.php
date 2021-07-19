@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Depot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 
-class UserController extends Controller
+class DepotController extends Controller
 {
     public function __construct()
     {
@@ -22,9 +22,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return view('users.index', [
-            'users' => $users
+        $depots = Depot::all();
+        return view('depots.index', [
+            'depots' => $depots
         ]);
     }
 
@@ -35,7 +35,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.edit', [
+        return view('depots.edit', [
             'new' => true
         ]);
     }
@@ -50,15 +50,12 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'email' => 'required|max:255|email|unique:users',
-            'password' => 'required|min:6'
+            'description' => 'nullable',
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
-
-        $user = User::create($validated);
-        $request->session()->flash('success', 'Kullanıcı başarıyla oluşturuldu!');
-        return redirect()->route('users.index');
+        $depot = Depot::create($validated);
+        $request->session()->flash('success', 'Depo başarıyla oluşturuldu!');
+        return redirect()->route('depots.index');
     }
 
     /**
@@ -80,9 +77,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
-        return view('users.edit', [
-            'user' => $user,
+        $depot = Depot::findOrFail($id);
+        return view('depots.edit', [
+            'depot' => $depot,
             'new' => false
         ]);
     }
@@ -96,25 +93,15 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-
-        $validationRules = [
+        $depot = Depot::findOrFail($id);
+        $validated = $request->validate([
             'name' => 'required|max:255',
-            'email' => ['required', 'max:255', 'email', Rule::unique('users')->ignore($user)],
-            'password' => 'nullable|min:6'
-        ];
+            'description' => 'nullable',
+        ]);
 
-        $validated = $request->validate($validationRules);
-
-        if (empty($validated['password'])) {
-            unset($validated['password']);
-        } else {
-            $validated['password'] = Hash::make($validated['password']);
-        }
-
-        $user->update($validated);
-        $request->session()->flash('success', 'Kullanıcı başarıyla düzenlendi!');
-        return redirect()->route('users.index');
+        $depot->update($validated);
+        $request->session()->flash('success', 'Depo başarıyla düzenlendi!');
+        return redirect()->route('depots.index');
     }
 
     /**
@@ -125,8 +112,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::destroy($id);
-        Session::flash('success', 'Kullanıcı başarıyla silindi!');
-        return redirect()->route('users.index');
+        Depot::destroy($id);
+        Session::flash('success', 'Depo başarıyla silindi!');
+        return redirect()->route('depots.index');
     }
 }

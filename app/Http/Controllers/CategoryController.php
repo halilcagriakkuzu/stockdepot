@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Category;
+use App\Models\Depot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 
-class UserController extends Controller
+class CategoryController extends Controller
 {
     public function __construct()
     {
@@ -22,9 +23,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return view('users.index', [
-            'users' => $users
+        $categories = Category::all();
+        return view('categories.index', [
+            'categories' => $categories
         ]);
     }
 
@@ -35,36 +36,36 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.edit', [
-            'new' => true
+        $depots = Depot::all();
+        return view('categories.edit', [
+            'new' => true,
+            'depots' => $depots
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'email' => 'required|max:255|email|unique:users',
-            'password' => 'required|min:6'
+            'description' => 'nullable',
+            'depot_id' => 'required',
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
-
-        $user = User::create($validated);
-        $request->session()->flash('success', 'Kullanıcı başarıyla oluşturuldu!');
-        return redirect()->route('users.index');
+        $category = Category::create($validated);
+        $request->session()->flash('success', 'Kategori başarıyla oluşturuldu!');
+        return redirect()->route('categories.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -75,58 +76,51 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
-        return view('users.edit', [
-            'user' => $user,
-            'new' => false
+        $category = Category::findOrFail($id);
+        $depots = Depot::all();
+        return view('categories.edit', [
+            'category' => $category,
+            'new' => false,
+            'depots' => $depots
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-
-        $validationRules = [
+        $category = Category::findOrFail($id);
+        $validated = $request->validate([
             'name' => 'required|max:255',
-            'email' => ['required', 'max:255', 'email', Rule::unique('users')->ignore($user)],
-            'password' => 'nullable|min:6'
-        ];
+            'description' => 'nullable',
+            'depot_id' => 'required',
+        ]);
 
-        $validated = $request->validate($validationRules);
-
-        if (empty($validated['password'])) {
-            unset($validated['password']);
-        } else {
-            $validated['password'] = Hash::make($validated['password']);
-        }
-
-        $user->update($validated);
-        $request->session()->flash('success', 'Kullanıcı başarıyla düzenlendi!');
-        return redirect()->route('users.index');
+        $category->update($validated);
+        $request->session()->flash('success', 'Kategori başarıyla düzenlendi!');
+        return redirect()->route('categories.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        User::destroy($id);
-        Session::flash('success', 'Kullanıcı başarıyla silindi!');
-        return redirect()->route('users.index');
+        Category::destroy($id);
+        Session::flash('success', 'Kategori başarıyla silindi!');
+        return redirect()->route('categories.index');
     }
 }

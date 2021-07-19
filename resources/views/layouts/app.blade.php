@@ -178,19 +178,19 @@
                     </li>
                     <li class="nav-header">Yönetim</li>
                     <li class="nav-item">
-                        <a href="{{ url('/users') }}" class="nav-link">
+                        <a href="{{ route('users.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-user-cog"></i>
                             <p>Kullanıcılar</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('depots.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-warehouse"></i>
                             <p>Depolar</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('categories.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-folder-open"></i>
                             <p>Kategoriler</p>
                         </a>
@@ -202,7 +202,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('companies.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-building"></i>
                             <p>Firmalar</p>
                         </a>

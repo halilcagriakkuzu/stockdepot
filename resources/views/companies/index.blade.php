@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title') Kullanıcılar @endsection
+@section('title') Firmalar @endsection
 
-@section('content-title') Kullanıcı Listesi @endsection
+@section('content-title') Firma Listesi @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item active">Kullanıcılar</li>
+    <li class="breadcrumb-item active">Firmalar</li>
 @endsection
 
 @section('css')
@@ -21,9 +21,9 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Sistemde kayıtlı kullanıcıların listesi ve işlemleri</h3>
+                <h3 class="card-title">Sistemde kayıtlı firmaların listesi ve işlemleri</h3>
                 <div class="float-right">
-                    <a type="button" href="{{ route('users.create') }}" class="btn btn-success"><span class="fas fa-plus"></span> Yeni Kullanıcı Oluştur</a>
+                    <a type="button" href="{{ route('companies.create') }}" class="btn btn-success"><span class="fas fa-plus"></span> Yeni Firma Oluştur</a>
                 </div>
             </div>
             <!-- /.card-header -->
@@ -32,20 +32,26 @@
                     <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Eposta</th>
-                            <th>İsim Soyisim</th>
+                            <th>İsim</th>
+                            <th>Durum</th>
                             <th>#</th>
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach ($users as $user)
+                    @foreach ($companies as $company)
                         <tr>
-                            <td>{{ $user->id }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td>{{ $user->name }}</td>
+                            <td>{{ $company->id }}</td>
+                            <td>{{ $company->name }}</td>
                             <td>
-                                <a type="button" href="{{ route('users.edit', ['user' => $user]) }}" class="btn btn-warning"><span class="fas fa-edit"></span> Düzenle</a>
-                                <form class="d-inline delete" action="{{ action('App\Http\Controllers\UserController@destroy', ['user' => $user]) }}" method="post">
+                                @if(!empty($company->is_active) && $company->is_active == true)
+                                    <span class="badge badge-success">Aktif</span>
+                                @else
+                                    <span class="badge badge-danger">Pasif</span>
+                                @endif
+                            </td>
+                            <td>
+                                <a type="button" href="{{ route('companies.edit', ['company' => $company]) }}" class="btn btn-warning"><span class="fas fa-edit"></span> Düzenle</a>
+                                <form class="d-inline delete" action="{{ action('App\Http\Controllers\CompanyController@destroy', ['company' => $company]) }}" method="post">
                                     {{ method_field('DELETE') }}
                                     {!! csrf_field() !!}
                                     <button type="submit" class="btn btn-danger"><span class="fas fa-trash"></span> Sil</button>

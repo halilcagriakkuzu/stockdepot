@@ -20,6 +20,8 @@ class Company extends Model
     protected $fillable = [
         'name',
         'is_active',
+        'created_by',
+        'updated_by'
     ];
 
     /**

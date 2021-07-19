@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title') Kullanıcılar @endsection
+@section('title') Kategorilar @endsection
 
-@section('content-title') Kullanıcı Listesi @endsection
+@section('content-title') Kategori Listesi @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item active">Kullanıcılar</li>
+    <li class="breadcrumb-item active">Kategorilar</li>
 @endsection
 
 @section('css')
@@ -21,9 +21,9 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Sistemde kayıtlı kullanıcıların listesi ve işlemleri</h3>
+                <h3 class="card-title">Sistemde kayıtlı kategorilerin listesi ve işlemleri</h3>
                 <div class="float-right">
-                    <a type="button" href="{{ route('users.create') }}" class="btn btn-success"><span class="fas fa-plus"></span> Yeni Kullanıcı Oluştur</a>
+                    <a type="button" href="{{ route('categories.create') }}" class="btn btn-success"><span class="fas fa-plus"></span> Yeni Kategori Oluştur</a>
                 </div>
             </div>
             <!-- /.card-header -->
@@ -32,20 +32,22 @@
                     <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Eposta</th>
-                            <th>İsim Soyisim</th>
+                            <th>İsim</th>
+                            <th>Açıklama</th>
+                            <th>Depo</th>
                             <th>#</th>
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach ($users as $user)
+                    @foreach ($categories as $category)
                         <tr>
-                            <td>{{ $user->id }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td>{{ $user->name }}</td>
+                            <td>{{ $category->id }}</td>
+                            <td>{{ $category->name }}</td>
+                            <td>{{ $category->description }}</td>
+                            <td>{{ $category->depot->name }}</td>
                             <td>
-                                <a type="button" href="{{ route('users.edit', ['user' => $user]) }}" class="btn btn-warning"><span class="fas fa-edit"></span> Düzenle</a>
-                                <form class="d-inline delete" action="{{ action('App\Http\Controllers\UserController@destroy', ['user' => $user]) }}" method="post">
+                                <a type="button" href="{{ route('categories.edit', ['category' => $category]) }}" class="btn btn-warning"><span class="fas fa-edit"></span> Düzenle</a>
+                                <form class="d-inline delete" action="{{ action('App\Http\Controllers\CategoryController@destroy', ['category' => $category]) }}" method="post">
                                     {{ method_field('DELETE') }}
                                     {!! csrf_field() !!}
                                     <button type="submit" class="btn btn-danger"><span class="fas fa-trash"></span> Sil</button>

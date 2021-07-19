@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Company;
+use App\Models\Depot;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 
-class UserController extends Controller
+class CompanyController extends Controller
 {
     public function __construct()
     {
@@ -22,9 +24,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return view('users.index', [
-            'users' => $users
+        $companies = Company::all();
+        return view('companies.index', [
+            'companies' => $companies
         ]);
     }
 
@@ -35,7 +37,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.edit', [
+        return view('companies.edit', [
             'new' => true
         ]);
     }
@@ -50,15 +52,15 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'email' => 'required|max:255|email|unique:users',
-            'password' => 'required|min:6'
+            'is_active' => 'nullable'
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
+        $validated['is_active'] = key_exists('is_active', $validated) ? 1 : 0;
+        $validated['created_by'] = Auth::user()->id;
 
-        $user = User::create($validated);
-        $request->session()->flash('success', 'Kullanıcı başarıyla oluşturuldu!');
-        return redirect()->route('users.index');
+        $company = Company::create($validated);
+        $request->session()->flash('success', 'Firma başarıyla oluşturuldu!');
+        return redirect()->route('companies.index');
     }
 
     /**
@@ -80,9 +82,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
-        return view('users.edit', [
-            'user' => $user,
+        $company = Company::findOrFail($id);
+        return view('companies.edit', [
+            'company' => $company,
             'new' => false
         ]);
     }
@@ -96,25 +98,18 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-
-        $validationRules = [
+        $company = Company::findOrFail($id);
+        $validated = $request->validate([
             'name' => 'required|max:255',
-            'email' => ['required', 'max:255', 'email', Rule::unique('users')->ignore($user)],
-            'password' => 'nullable|min:6'
-        ];
+            'is_active' => 'nullable'
+        ]);
 
-        $validated = $request->validate($validationRules);
+        $validated['is_active'] = key_exists('is_active', $validated) ? 1 : 0;
+        $validated['updated_by'] = Auth::user()->id;
 
-        if (empty($validated['password'])) {
-            unset($validated['password']);
-        } else {
-            $validated['password'] = Hash::make($validated['password']);
-        }
-
-        $user->update($validated);
-        $request->session()->flash('success', 'Kullanıcı başarıyla düzenlendi!');
-        return redirect()->route('users.index');
+        $company->update($validated);
+        $request->session()->flash('success', 'Firma başarıyla düzenlendi!');
+        return redirect()->route('companies.index');
     }
 
     /**
@@ -125,8 +120,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::destroy($id);
-        Session::flash('success', 'Kullanıcı başarıyla silindi!');
-        return redirect()->route('users.index');
+        $company = Company::findOrFail($id);
+        $company->update(['updated_by' => Auth::user()->id]);
+        Company::destroy($id);
+        Session::flash('success', 'Firma başarıyla silindi!');
+        return redirect()->route('companies.index');
     }
 }

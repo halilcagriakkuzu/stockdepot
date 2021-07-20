@@ -20,12 +20,11 @@ class CreateProductTransactionsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreignId('rent_form_id')->constrained('rent_forms');
+            $table->foreignId('rent_form_id')->nullable()->constrained('rent_forms');
             $table->foreignId('product_id')->constrained('products');
             $table->foreignId('action_id')->constrained('actions');
 
             $table->foreignId('created_by')->constrained('users');
-            $table->foreignId('updated_by')->nullable()->constrained('users');
         });
     }
 

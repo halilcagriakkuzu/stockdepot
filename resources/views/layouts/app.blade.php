@@ -113,13 +113,13 @@
                     <!-- Add icons to the links using the .nav-icon class
                          with font-awesome or any other icon font library -->
                     <li class="nav-item">
-                        <a href="{{ url('/') }}" class="nav-link">
+                        <a href="{{ url('/') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-home"></i>
                             <p>Anasayfa</p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
+                    <li class="nav-item {{ Route::currentRouteName() == 'depots.show' ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link {{Route::currentRouteName() == 'depots.show' ? 'active' : '' }}">
                             <i class="nav-icon fas fa-warehouse"></i>
                             <p>
                                 Depolar
@@ -127,18 +127,14 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="fas fa-microphone nav-icon"></i>
-                                    <p>Ses Depo</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="fas fa-camera nav-icon"></i>
-                                    <p>Kamera Depo</p>
-                                </a>
-                            </li>
+                            @foreach($menuDepots as $depot)
+                                <li class="nav-item">
+                                    <a href="{{route('depots.show', ['depot' => $depot])}}" class="nav-link {{ (request()->is('depots*') && request()->segment(2) == $depot->id) ? 'active' : '' }}">
+                                        <i class="fas fa-circle nav-icon"></i>
+                                        <p>{{ $depot->name }}</p>
+                                    </a>
+                                </li>
+                            @endforeach
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="fas fa-tools nav-icon"></i>
@@ -178,31 +174,31 @@
                     </li>
                     <li class="nav-header">Yönetim</li>
                     <li class="nav-item">
-                        <a href="{{ route('users.index') }}" class="nav-link">
+                        <a href="{{ route('users.index') }}" class="nav-link {{ request()->is('users*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-user-cog"></i>
                             <p>Kullanıcılar</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('depots.index') }}" class="nav-link">
+                        <a href="{{ route('depots.index') }}" class="nav-link {{ Route::currentRouteName() != 'depots.show' && request()->is('depots*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-warehouse"></i>
                             <p>Depolar</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('categories.index') }}" class="nav-link">
+                        <a href="{{ route('categories.index') }}" class="nav-link {{ request()->is('categories*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-folder-open"></i>
                             <p>Kategoriler</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('products.index') }}" class="nav-link">
+                        <a href="{{ route('products.index') }}" class="nav-link {{ request()->is('products*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-box-open"></i>
                             <p>Malzemeler</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('companies.index') }}" class="nav-link">
+                        <a href="{{ route('companies.index') }}" class="nav-link {{ request()->is('companies*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-building"></i>
                             <p>Firmalar</p>
                         </a>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Depot;
+use App\Models\Product;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -62,11 +64,21 @@ class DepotController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $depot = Depot::find($id);
+        $products = Product::select('products.*', 'categories.name')
+            ->join('categories', 'categories.id', 'products.category_id')
+            ->where('products.is_active', '=', 1)
+            ->where('categories.depot_id', '=', $id)
+            ->get();
+
+        return view('depots.show', [
+            'depot' => $depot,
+            'products' => $products
+        ]);
     }
 
     /**

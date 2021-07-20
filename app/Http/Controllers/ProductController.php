@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Depot;
 use App\Models\Product;
+use App\Models\ProductTransaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -79,11 +80,21 @@ class ProductController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $product = Product::where('products.id', '=', $id)->with('category')->firstOrFail();
+        $transactions = ProductTransaction::with('rentForm')
+            ->with('createdBy')
+            ->where('product_id', '=', $id)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        return view('products.show', [
+            'product' => $product,
+            'transactions' => $transactions
+        ]);
     }
 
     /**

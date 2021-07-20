@@ -24,11 +24,15 @@ class Product extends Model
         'shelf_no',
         'row_no',
         'count',
-        'unavailable_count',
         'description',
         'buy_price',
         'buy_date',
         'is_active',
+        'category_id',
+    ];
+
+    protected $casts = [
+        'buy_date' => 'date:d/m/Y',
     ];
 
     /**

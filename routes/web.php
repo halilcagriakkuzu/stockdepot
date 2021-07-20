@@ -18,6 +18,7 @@ Route::resource('users', \App\Http\Controllers\UserController::class);
 Route::resource('depots', \App\Http\Controllers\DepotController::class);
 Route::resource('companies', \App\Http\Controllers\CompanyController::class);
 Route::resource('categories', \App\Http\Controllers\CategoryController::class);
+Route::resource('products', \App\Http\Controllers\ProductController::class);
 
 /** AUTH */
 Auth::routes();

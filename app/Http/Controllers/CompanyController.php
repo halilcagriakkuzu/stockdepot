@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Depot;
+use App\Models\RentForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -67,11 +68,20 @@ class CompanyController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $company = Company::with('createdBy')
+            ->where('id', '=', $id)
+            ->firstOrFail();
+
+        $rentForms = $company->rentForms()->get();
+
+        return view('companies.show', [
+            'company' => $company,
+            'rentForms' => $rentForms
+        ]);
     }
 
     /**

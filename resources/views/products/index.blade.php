@@ -49,13 +49,12 @@
                             <td>{{ $product->model }}</td>
                             <td>{{ $product->category->name }}</td>
                             <td>
-                                @if(!empty($product->is_active) && $product->is_active == true)
-                                    <span class="badge badge-success">Aktif</span>
-                                @else
-                                    <span class="badge badge-danger">Pasif</span>
-                                @endif
+                                <span class="badge badge-{{ $product->productStatus->color }}">
+                                    {{ __("productStatuses.".$product->productStatus->name) }}
+                                </span>
                             </td>
                             <td>
+                                <a type="button" href="{{ route('products.show', ['product' => $product->id]) }}" class="btn btn-primary"><span class="fas fa-search"></span> Malzeme Detayı</a>
                                 <a type="button" href="{{ route('products.edit', ['product' => $product]) }}" class="btn btn-warning"><span class="fas fa-edit"></span> Düzenle</a>
                                 <form class="d-inline delete" action="{{ action('App\Http\Controllers\ProductController@destroy', ['product' => $product]) }}" method="post">
                                     {{ method_field('DELETE') }}

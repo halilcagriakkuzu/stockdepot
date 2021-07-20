@@ -49,12 +49,12 @@
                         <b>Satır No</b> <a class="float-right">{{ $product->row_no ?? '' }}</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Durum</b> <a class="float-right">
-                            @if($product->is_active)
-                                <span class="badge badge-success">Aktif</span>
-                            @else
-                                <span class="badge badge-danger">Pasif</span>
-                            @endif</a>
+                        <b>Durum</b>
+                        <a class="float-right">
+                            <span class="badge badge-{{ $product->productStatus->color }}">
+                                {{ __("productStatuses.".$product->productStatus->name) }}
+                            </span>
+                        </a>
                     </li>
                     <li class="list-group-item">
                         <p>

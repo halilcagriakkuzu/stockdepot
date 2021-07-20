@@ -141,17 +141,6 @@
                         @enderror
                     </div>
 
-                    <div class="form-group">
-                        <label>Durumu</label>
-                        <div class="custom-control custom-switch custom-switch-off-secondary custom-switch-on-success">
-                            <input type="checkbox" class="custom-control-input @error('is_active') is-invalid @enderror" id="is_active" name="is_active" @if($product->is_active ?? 0 == 1) checked @endif>
-                            <label class="custom-control-label" for="is_active"> </label>
-                        </div>
-                        @error('is_active')
-                        <span class="error invalid-feedback">{{ $message }}</span>
-                        @enderror
-                    </div>
-
                 </div>
                 <div class="card-footer">
                     @if($new)

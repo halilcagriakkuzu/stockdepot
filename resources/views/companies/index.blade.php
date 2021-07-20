@@ -50,6 +50,7 @@
                                 @endif
                             </td>
                             <td>
+                                <a type="button" href="{{ route('companies.show', ['company' => $company]) }}" class="btn btn-primary"><span class="fas fa-search"></span> Firma Detayı</a>
                                 <a type="button" href="{{ route('companies.edit', ['company' => $company]) }}" class="btn btn-warning"><span class="fas fa-edit"></span> Düzenle</a>
                                 <form class="d-inline delete" action="{{ action('App\Http\Controllers\CompanyController@destroy', ['company' => $company]) }}" method="post">
                                     {{ method_field('DELETE') }}

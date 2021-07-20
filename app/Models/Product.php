@@ -12,6 +12,8 @@ class Product extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const STATUS_IN_DEPOT = "IN_DEPOT";
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,7 +29,7 @@ class Product extends Model
         'description',
         'buy_price',
         'buy_date',
-        'is_active',
+        'product_status_id',
         'category_id',
     ];
 
@@ -42,6 +44,15 @@ class Product extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * Product belongs to one status
+     * @return BelongsTo
+     */
+    public function productStatus(): BelongsTo
+    {
+        return $this->belongsTo(ProductStatus::class);
     }
 
     /**

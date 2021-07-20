@@ -25,11 +25,11 @@ class CreateProductsTable extends Migration
             $table->text('description')->nullable();
             $table->decimal('buy_price')->nullable();
             $table->date('buy_date')->nullable();
-            $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreignId('category_id')->constrained('categories');
+            $table->foreignId('product_status_id')->constrained('product_statuses');
         });
     }
 

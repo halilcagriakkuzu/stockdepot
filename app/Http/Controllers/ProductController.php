@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Depot;
 use App\Models\Product;
+use App\Models\ProductStatus;
 use App\Models\ProductTransaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with('productStatus')->get();
         return view('products.index', [
             'products' => $products
         ]);
@@ -65,11 +66,10 @@ class ProductController extends Controller
             'description' => 'nullable',
             'buy_price' => 'nullable',
             'buy_date' => 'nullable',
-            'is_active' => 'nullable',
             'category_id' => 'required',
         ]);
 
-        $validated['is_active'] = key_exists('is_active', $validated) ? 1 : 0;
+        $validated['product_status_id'] = ProductStatus::where('name', '=', Product::STATUS_IN_DEPOT)->first()->id;
 
         $product = Product::create($validated);
         $request->session()->flash('success', 'Malzeme başarıyla oluşturuldu!');
@@ -84,7 +84,10 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::where('products.id', '=', $id)->with('category')->firstOrFail();
+        $product = Product::with('productStatus')
+            ->with('category')
+            ->where('products.id', '=', $id)
+            ->firstOrFail();
         $transactions = ProductTransaction::with('rentForm')
             ->with('createdBy')
             ->where('product_id', '=', $id)
@@ -135,12 +138,12 @@ class ProductController extends Controller
             'description' => 'nullable',
             'buy_price' => 'nullable',
             'buy_date' => 'nullable',
-            'is_active' => 'nullable',
+            'product_status_id' => 'required',
             'category_id' => 'required',
         ]);
 
-        $validated['is_active'] = key_exists('is_active', $validated) ? 1 : 0;
         $validated['buy_date'] = date_create_from_format("d/m/Y", $validated['buy_date']);
+        $validated['product_status_id'] = ProductStatus::where('name', '=', Product::STATUS_IN_DEPOT)->first()->id;
 
         $product->update($validated);
         $request->session()->flash('success', 'Malzeme başarıyla düzenlendi!');

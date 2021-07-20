@@ -1,11 +1,23 @@
 @extends('layouts.app')
 
-@section('title') {{ $depot->name }} @endsection
+@section('title')
+    @if(!empty($depot))
+        {{ $depot->name }}
+    @else
+        Ölçü/Bakım
+    @endif
+@endsection
 
-@section('content-title') {{ $depot->name }} @endsection
+@section('content-title')
+    @if(!empty($depot))
+        {{ $depot->name }}
+    @else
+        Ölçü/Bakım
+    @endif
+@endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item active">{{ $depot->name }} Malzeme Listesi</li>
+    <li class="breadcrumb-item active"> @if(!empty($depot)) {{ $depot->name }} @else Ölçü/Bakım @endif Malzeme Listesi</li>
 @endsection
 
 @section('css')
@@ -21,15 +33,17 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Sistemde kayıtlı {{ $depot->name }} malzemeleri</h3>
-                <div class="float-right">
-                    <a type="button" href="{{ route('products.create') }}" class="btn btn-success"><span class="fas fa-plus"></span> Yeni Malzeme Oluştur</a>
-                    <a type="button" href="{{ route('products.create') }}" class="btn btn-success"><span class="fas fa-plus"></span> Yeni Kiralama Oluştur</a>
-                </div>
+                <h3 class="card-title">Sistemde kayıtlı @if(!empty($depot)) {{ $depot->name }} @else Ölçü/Bakım @endif malzemeleri</h3>
+                @if(!empty($depot))
+                    <div class="float-right">
+                        <a type="button" href="{{ route('products.create') }}" class="btn btn-success"><span class="fas fa-plus"></span> Yeni Malzeme Oluştur</a>
+                        <a type="button" href="{{ route('products.create') }}" class="btn btn-success"><span class="fas fa-plus"></span> Yeni Kiralama Oluştur</a>
+                    </div>
+                @endif
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <table id="users-dt" class="table table-bordered table-hover">
+                <table id="dt" class="table table-bordered table-hover">
                     <thead>
                     <tr>
                         <th>Seri No</th>
@@ -48,7 +62,6 @@
                             <td>{{ $product->model }}</td>
                             <td>
                                 <a type="button" href="{{ route('products.show', ['product' => $product->id]) }}" class="btn btn-primary"><span class="fas fa-search"></span> Malzeme Detayı</a>
-                                <a type="button" href="#" class="btn btn-info"><span class="fas fa-tools"></span> Ölçü Bakıma Gönder</a>
                             </td>
                         </tr>
                     @endforeach
@@ -77,12 +90,8 @@
     <script src="{{asset('plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
 
     <script>
-        $(".delete").on("submit", function(){
-            return confirm("Bu kaydı silmek istediğinden emin misin?");
-        });
-
         $(function () {
-            $('#users-dt').DataTable({
+            $('#dt').DataTable({
                 language: {
                     url: "{{asset('plugins/datatables/tr.json')}}"
                 },

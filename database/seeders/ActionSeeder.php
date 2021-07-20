@@ -41,7 +41,13 @@ class ActionSeeder extends Seeder
         ]);
 
         DB::table('actions')->insert([
-            'id' => 5,
+            'id' =>5,
+            'type' => 'SEND_TO_DEPOT_FROM_MAINTENANCE',
+            'description' => 'Ölçü/Bakımdaki bir ürünün tekrar depoya gönderilme aksiyonu. Bu durumdaki ürün forma eklenebilir',
+        ]);
+
+        DB::table('actions')->insert([
+            'id' => 6,
             'type' => 'MARK_AS_DISABLED',
             'description' => 'Depodaki bir ürünün kullanılamaz olduğunu gösteren aksiyon, bu aksiyon sonrası ürün aktiften pasife geçer',
         ]);

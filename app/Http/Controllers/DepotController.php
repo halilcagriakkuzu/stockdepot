@@ -82,6 +82,19 @@ class DepotController extends Controller
         ]);
     }
 
+    public function showMaintenance()
+    {
+        $products = Product::select('products.*', 'categories.name')
+            ->join('categories', 'categories.id', 'products.category_id')
+            ->join('product_statuses', 'product_statuses.id', 'products.product_status_id')
+            ->where('product_statuses.name', '=', Product::STATUS_IN_MAINTENANCE)
+            ->get();
+
+        return view('depots.show', [
+            'products' => $products
+        ]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

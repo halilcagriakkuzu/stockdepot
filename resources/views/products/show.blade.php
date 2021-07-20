@@ -62,9 +62,15 @@
                         </p>
                     </li>
                 </ul>
-
-                <a type="button" href="#" class="btn btn-block btn-info"><span class="fas fa-tools"></span> Ölçü Bakıma Gönder</a>
-                <a type="button" href="#" class="btn btn-block btn-danger"><span class="fas fa-trash"></span> Hizmet Dışı Yap</a>
+                @if($product->productStatus->name == 'IN_DEPOT' || $product->productStatus->name == 'RENTED')
+                    <a type="button" href="{{ route('productStatus.changeProductStatus', ['id' => $product->id, 'status' => 'IN_MAINTENANCE']) }}" class="btn btn-block btn-info"><span class="fas fa-tools"></span> Ölçü Bakıma Gönder</a>
+                @endif
+                @if($product->productStatus->name == 'IN_MAINTENANCE')
+                    <a type="button" href="{{ route('productStatus.changeProductStatus', ['id' => $product->id, 'status' => 'IN_DEPOT']) }}" class="btn btn-block btn-success"><span class="fas fa-warehouse"></span> Depoya Gönder</a>
+                @endif
+                @if($product->productStatus->name == 'IN_DEPOT' || $product->productStatus->name == 'RENTED' || $product->productStatus->name == 'IN_MAINTENANCE')
+                    <a type="button" href="{{ route('productStatus.changeProductStatus', ['id' => $product->id, 'status' => 'DISABLED']) }}" class="btn btn-block btn-danger"><span class="fas fa-trash"></span> Hizmet Dışı Yap</a>
+                @endif
             </div>
             <!-- /.card-body -->
         </div>

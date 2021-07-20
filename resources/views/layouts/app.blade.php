@@ -118,8 +118,8 @@
                             <p>Anasayfa</p>
                         </a>
                     </li>
-                    <li class="nav-item {{ Route::currentRouteName() == 'depots.show' ? 'menu-open' : '' }}">
-                        <a href="#" class="nav-link {{Route::currentRouteName() == 'depots.show' ? 'active' : '' }}">
+                    <li class="nav-item {{ Route::currentRouteName() == 'depots.show' || Route::currentRouteName() == 'depots.showMaintenance' ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link {{Route::currentRouteName() == 'depots.show' || Route::currentRouteName() == 'depots.showMaintenance' ? 'active' : '' }}">
                             <i class="nav-icon fas fa-warehouse"></i>
                             <p>
                                 Depolar
@@ -136,7 +136,7 @@
                                 </li>
                             @endforeach
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="{{route('depots.showMaintenance')}}" class="nav-link {{Route::currentRouteName() == 'depots.showMaintenance' ? 'active' : '' }}">
                                     <i class="fas fa-tools nav-icon"></i>
                                     <p>Ölçü/Bakım</p>
                                 </a>
@@ -180,7 +180,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('depots.index') }}" class="nav-link {{ Route::currentRouteName() != 'depots.show' && request()->is('depots*') ? 'active' : '' }}">
+                        <a href="{{ route('depots.index') }}" class="nav-link {{ Route::currentRouteName() != 'depots.show' && Route::currentRouteName() != 'depots.showMaintenance' && request()->is('depots*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-warehouse"></i>
                             <p>Depolar</p>
                         </a>

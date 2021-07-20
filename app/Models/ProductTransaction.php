@@ -17,8 +17,11 @@ class ProductTransaction extends Model
      * @var array
      */
     protected $fillable = [
-        'count',
+        'product_id',
+        'created_by',
+        'action_id',
         'description',
+        'count',
     ];
 
     /**

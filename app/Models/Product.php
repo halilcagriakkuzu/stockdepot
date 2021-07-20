@@ -13,6 +13,7 @@ class Product extends Model
     use HasFactory, SoftDeletes;
 
     const STATUS_IN_DEPOT = "IN_DEPOT";
+    const STATUS_IN_MAINTENANCE = "IN_MAINTENANCE";
 
     /**
      * The attributes that are mass assignable.

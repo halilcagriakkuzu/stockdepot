@@ -102,6 +102,7 @@
                                     <td>{{ $rentFormProduct->count ?? "--" }}</td>
                                     <td>{{ $rentFormProduct->product->description }}</td>
                                     <td>
+                                        <a type="button" target="_blank" href="{{ route('products.show', ['product' => $rentFormProduct->product->id]) }}" class="btn btn-primary"><span class="fas fa-search"></span> Malzeme Detayı</a>
                                         <a type="button" href="{{ route('rentForms.removeProductFromActiveRentForm', ['id' => $rentForm->id, 'productId' => $rentFormProduct->product->id]) }}" class="btn btn-block btn-info"><span class="fas fa-minus"></span> Kiralamadan Al</a>
                                     </td>
                                 </tr>

@@ -109,11 +109,6 @@ class RentFormController extends Controller
             ->where('rent_form_id', '=', $id)
             ->firstOrFail();
 
-        /*if ($rentFormProduct->count > 0) {
-            $rentFormProduct->product->unavailable_count -= $rentFormProduct->count;
-            $rentFormProduct->product->save();
-        }*/
-
         $rentFormProduct->forceDelete();
         Session::flash('info', 'Malzeme formdan çıkartıldı');
         return redirect()->route('rentForms.edit', ['rentForm' => $id]);
@@ -121,19 +116,59 @@ class RentFormController extends Controller
 
     public function removeProductFromActiveRentForm($id, $productId)
     {
-        // TODO:!!!
+        $rentForm = RentForm::with('rentFormStatus')
+            ->with('company')
+            ->with('createdBy')
+            ->where('id', '=', $id)
+            ->firstOrFail();
+        $product = Product::with('productStatus')
+            ->with('category')
+            ->where('products.id', '=', $productId)
+            ->firstOrFail();
+        $productStatuses = ProductStatus::whereIn('name', ['IN_DEPOT', 'IN_MAINTENANCE'])->get();
+        return view('rentForms.removeProductFromActiveRentForm', [
+            'product' => $product,
+            'rentForm' => $rentForm,
+            'productStatuses' => $productStatuses
+        ]);
+    }
+
+    public function removeProductFromActiveRentFormStore(Request $request, $id, $productId)
+    {
+        $rentForm = RentForm::findOrFail($id);
+        $product = Product::findOrFail($productId);
         $rentFormProduct = RentFormProduct::where('product_id', '=', $productId)
             ->where('rent_form_id', '=', $id)
             ->firstOrFail();
 
-        /*if ($rentFormProduct->count > 0) {
-            $rentFormProduct->product->unavailable_count -= $rentFormProduct->count;
-            $rentFormProduct->product->save();
-        }*/
+        if ($request->get('product_status') == 'IN_DEPOT') {
+            $status = ProductStatus::where('name', '=', 'IN_DEPOT')->firstOrFail();
+            $action = Action::where('type', '=', 'RENT_BACK_FROM_COMPANY_TO_DEPOT')->firstOrFail();
+        } else if ($request->get('product_status') == 'IN_MAINTENANCE') {
+            $status = ProductStatus::where('name', '=', 'IN_MAINTENANCE')->firstOrFail();
+            $action = Action::where('type', '=', 'RENT_BACK_FROM_COMPANY_TO_MAINTENANCE')->firstOrFail();
+        }
 
-        $rentFormProduct->forceDelete();
-        Session::flash('info', 'Malzeme formdan çıkartıldı');
-        return redirect()->route('rentForms.edit', ['rentForm' => $id]);
+        $requestPayload = [
+            'product_id' => $product->id,
+            'created_by' => Auth::user()->id,
+            'action_id' => $action->id,
+            'description' => $request->get('description')
+        ];
+        if (!empty($rentFormProduct->count) && $rentFormProduct->count > 0) {
+            $product->unavailable_count -= $rentFormProduct->count;
+            $requestPayload['count'] = $rentFormProduct->count;
+        }
+        ProductTransaction::create($requestPayload);
+        $product->product_status_id = $status->id;
+
+        $product->save();
+        $rentFormProduct->deleted_by = Auth::user()->id;
+        $rentFormProduct->save();
+        $rentFormProduct->delete();
+
+        $request->session()->flash('success', 'Malzeme başarıyla eklendi!');
+        return redirect()->route('rentForms.show', ['rentForm' => $rentForm->id]);
     }
 
     /**

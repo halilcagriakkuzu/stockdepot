@@ -24,6 +24,7 @@ Route::post('/rentForms/{id}/addProduct/{productId}', [App\Http\Controllers\Rent
 Route::get('/rentForms/{id}/removeProduct/{productId}', [App\Http\Controllers\RentFormController::class, 'removeProductFromRentForm'])->name('rentForms.removeProductFromRentForm');
 Route::get('/rentForms/{id}/activate', [App\Http\Controllers\RentFormController::class, 'activateRentForm'])->name('rentForms.activateRentForm');
 Route::get('/rentForms/{id}/removeProductFromActive/{productId}', [App\Http\Controllers\RentFormController::class, 'removeProductFromActiveRentForm'])->name('rentForms.removeProductFromActiveRentForm');
+Route::post('/rentForms/{id}/removeProductFromActive/{productId}', [App\Http\Controllers\RentFormController::class, 'removeProductFromActiveRentFormStore'])->name('rentForms.removeProductFromActiveRentFormStore');
 
 Route::resource('users', \App\Http\Controllers\UserController::class);
 Route::resource('depots', \App\Http\Controllers\DepotController::class);

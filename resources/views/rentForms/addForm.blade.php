@@ -85,7 +85,7 @@
                     @if(!empty($product->count))
                         <div class="form-group">
                             <label for="count">Kullanılacak Adet <i class="text-danger">*</i></label>
-                            <input class="form-control @error('count') is-invalid @enderror" type="number" min="1" max="{{ $product->count - $product->unavailable_count }}" name="count" id="count" value="{{ old('count') ?? '' }}" placeholder="Kullanılacak Adet">
+                            <input class="form-control @error('count') is-invalid @enderror" type="number" min="1" max="{{ $product->count - $product->unavailable_count }}" name="count" id="count" value="{{ old('count') ?? '' }}" placeholder="Kullanılacak Adet" required>
                             @error('count')
                             <span class="error invalid-feedback">{{ $message }}</span>
                             @enderror

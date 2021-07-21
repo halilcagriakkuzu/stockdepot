@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title') Malzemeler @endsection
+@section('title') Kiralama Formları @endsection
 
-@section('content-title') Malzeme Listesi @endsection
+@section('content-title') Kiralama Formları Listesi @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item active">Malzemeler</li>
+    <li class="breadcrumb-item active">Kiralama Formları</li>
 @endsection
 
 @section('css')
@@ -21,9 +21,9 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Sistemde kayıtlı malzemelerin listesi ve işlemleri</h3>
+                <h3 class="card-title">Sistemde kayıtlı kiralama formları listesi ve işlemleri</h3>
                 <div class="float-right">
-                    <a type="button" href="{{ route('products.create') }}" class="btn btn-success"><span class="fas fa-plus"></span> Yeni Malzeme Oluştur</a>
+                    <a type="button" href="{{ route('rentForms.create') }}" class="btn btn-success"><span class="fas fa-plus"></span> Yeni Kiralama Formu Oluştur</a>
                 </div>
             </div>
             <!-- /.card-header -->
@@ -32,35 +32,29 @@
                     <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Seri No</th>
-                            <th>Marka</th>
-                            <th>Model</th>
-                            <th>Kategori</th>
+                            <th>Firma</th>
+                            <th>Muhatap</th>
+                            <th>Oluşturulma Tarihi</th>
+                            <th>Oluşturan</th>
                             <th>Durum</th>
                             <th>#</th>
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach ($products as $product)
+                    @foreach ($rentForms as $rentForm)
                         <tr>
-                            <td>{{ $product->id }}</td>
-                            <td>{{ $product->serial_number }}</td>
-                            <td>{{ $product->make }}</td>
-                            <td>{{ $product->model }}</td>
-                            <td>{{ $product->category->name }}</td>
+                            <td>{{ $rentForm->id }}</td>
+                            <td>{{ $rentForm->company->name }}</td>
+                            <td>{{ $rentForm->interlocutor_name }}</td>
+                            <td>{{ $rentForm->created_at->format('d/m/Y H:i') }}</td>
+                            <td>{{ $rentForm->createdBy->name }}</td>
                             <td>
-                                <span class="badge badge-{{ $product->productStatus->color }}">
-                                    {{ __("productStatuses.".$product->productStatus->name) }}
+                                <span class="badge badge-{{ $rentForm->rentFormStatus->color }}">
+                                    {{ __("rentFormStatuses.".$rentForm->rentFormStatus->name) }}
                                 </span>
                             </td>
                             <td>
-                                <a type="button" href="{{ route('products.show', ['product' => $product->id]) }}" class="btn btn-primary"><span class="fas fa-search"></span> Malzeme Detayı</a>
-                                <a type="button" href="{{ route('products.edit', ['product' => $product]) }}" class="btn btn-warning"><span class="fas fa-edit"></span> Düzenle</a>
-                                <form class="d-inline delete" action="{{ action('App\Http\Controllers\ProductController@destroy', ['product' => $product]) }}" method="post">
-                                    {{ method_field('DELETE') }}
-                                    {!! csrf_field() !!}
-                                    <button type="submit" class="btn btn-danger"><span class="fas fa-trash"></span> Sil</button>
-                                </form>
+                                <a type="button" href="{{ route('rentForms.show', ['rentForm' => $rentForm->id]) }}" class="btn btn-primary"><span class="fas fa-search"></span> Form Detayı</a>
                             </td>
                         </tr>
                     @endforeach
@@ -89,9 +83,6 @@
     <script src="{{asset('plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
 
     <script>
-        $(".delete").on("submit", function(){
-            return confirm("Bu kaydı silmek istediğinden emin misin?");
-        });
 
         $(function () {
             $('#users-dt').DataTable({

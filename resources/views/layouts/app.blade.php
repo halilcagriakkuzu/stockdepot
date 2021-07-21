@@ -143,7 +143,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{ Route::currentRouteName() == 'rentForms.create' || Route::currentRouteName() == 'rentForms.index' ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-business-time"></i>
                             <p>
@@ -159,15 +159,9 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="{{ route('rentForms.index') }}" class="nav-link {{Route::currentRouteName() == 'rentForms.index' ? 'active' : '' }}">
                                     <i class="fas fa-clipboard-check nav-icon"></i>
-                                    <p>Aktif Kiralamalar</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="fas fa-clipboard nav-icon"></i>
-                                    <p>Geçmiş Kiralamalar</p>
+                                    <p>Kiralamalar</p>
                                 </a>
                             </li>
                         </ul>

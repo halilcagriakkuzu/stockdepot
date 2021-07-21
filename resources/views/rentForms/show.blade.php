@@ -1,11 +1,15 @@
 @extends('layouts.app')
 
-@section('title') Malzeme Detayı {{ $product->make }} {{ $product->model }} @endsection
+@section('title')
+    #{{ $rentForm->id }} Kiralama Formu Detayları
+@endsection
 
-@section('content-title') Malzeme Detayı @endsection
+@section('content-title')
+    #{{ $rentForm->id }} {{ $rentForm->company->name }} Detayları
+@endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item active">Malzeme Detayı {{ $product->make }} {{ $product->model }}</li>
+    <li class="breadcrumb-item active">Kiralama Formu Detayları #{{ $rentForm->id }}</li>
 @endsection
 
 @section('css')
@@ -16,99 +20,139 @@
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-md-3">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">#{{ $rentForm->id }} {{ $rentForm->company->name }} kiralama formunun detayları</h3>
+                            <div class="float-right">
+                                @if($rentForm->rentFormStatus->name == 'ACTIVE')
+                                    <a type="button" href="#" class="btn btn-info"><span class="fas fa-check"></span> Tamamlandı Olarak İşaretle</a>
+                                @endif
+                                <a class="btn btn-success" href="#" type="button"><span class="fas fa-pdf"></span> PDF Çıktı Al</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-md-5 mx-auto">
+                                    <div class="card card-primary card-outline">
+                                        <div class="card-body box-profile">
+                                            <h3 class="profile-username text-center">{{ $rentForm->company->name ?? '' }}</h3>
+                                            <ul class="list-group list-group-unbordered mb-3">
+                                                <li class="list-group-item">
+                                                    <b>Oluşturulma Tarihi / Oluşturan</b> <a class="float-right">{{ $rentForm->created_at->format('d/m/Y H:i') }} / {{ $rentForm->createdBy->name }}</a>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <b>Düzenlenme Tarihi / Düzenleyen</b> <a class="float-right">{{ $rentForm->updated_at->format('d/m/Y H:i') }} / {{ $rentForm->updatedBy->name }}</a>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <b>Muhatap İsmi</b> <a class="float-right">{{ $rentForm->interlocutor_name ?? '' }}</a>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <b>Muhatap Eposta</b> <a class="float-right">{{ $rentForm->interlocutor_email ?? '' }}</a>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <b>Muhatap Telefon</b> <a class="float-right">{{ $rentForm->interlocutor_phone ?? '' }}</a>
+                                                </li>
 
-        <!-- Profile Image -->
-        <div class="card card-primary card-outline">
-            <div class="card-body box-profile">
-                <h3 class="profile-username text-center">{{ $product->make ?? '' }} {{ $product->model ?? '' }}</h3>
-                <p class="text-muted text-center">{{ $product->category->name }} / {{ $product->category->depot->name }}</p>
+                                                <li class="list-group-item">
+                                                    <b>Ücret</b> <a class="float-right">{{ $rentForm->price ?? '' }} {{ $rentForm->currency ?? '' }}</a>
+                                                </li>
 
-                <ul class="list-group list-group-unbordered mb-3">
-                    @if(!empty($product->count))
-                        <li class="list-group-item">
-                            <b>Toplam Stok Adedi</b> <a class="float-right">{{ $product->count }}</a>
-                        </li>
-                    @endif
-                    @if(!empty($product->serial_number))
-                        <li class="list-group-item">
-                            <b>Seri Numarası</b> <a class="float-right">{{ $product->serial_number }}</a>
-                        </li>
-                    @endif
-                    <li class="list-group-item">
-                        <b>Satın Alınma Tarihi</b> <a class="float-right">{{ $product->buy_date ?? '' }}</a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>Satın Alınma Fiyatı</b> <a class="float-right">{{ $product->buy_price ?? '' }} ₺</a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>Raf No</b> <a class="float-right">{{ $product->shelf_no ?? '' }}</a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>Satır No</b> <a class="float-right">{{ $product->row_no ?? '' }}</a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>Durum</b>
-                        <a class="float-right">
-                            <span class="badge badge-{{ $product->productStatus->color }}">
-                                {{ __("productStatuses.".$product->productStatus->name) }}
-                            </span>
-                        </a>
-                    </li>
-                    <li class="list-group-item">
-                        <p>
-                            {{ $product->description ?? '' }}
-                        </p>
-                    </li>
-                </ul>
-                @if($product->productStatus->name == 'IN_DEPOT' || $product->productStatus->name == 'RENTED')
-                    <a type="button" href="{{ route('productStatus.changeProductStatus', ['id' => $product->id, 'status' => 'IN_MAINTENANCE']) }}" class="btn btn-block btn-info"><span class="fas fa-tools"></span> Ölçü Bakıma Gönder</a>
-                @endif
-                @if($product->productStatus->name == 'IN_MAINTENANCE')
-                    <a type="button" href="{{ route('productStatus.changeProductStatus', ['id' => $product->id, 'status' => 'IN_DEPOT']) }}" class="btn btn-block btn-success"><span class="fas fa-warehouse"></span> Depoya Gönder</a>
-                @endif
-                @if($product->productStatus->name == 'IN_DEPOT' || $product->productStatus->name == 'RENTED' || $product->productStatus->name == 'IN_MAINTENANCE')
-                    <a type="button" href="{{ route('productStatus.changeProductStatus', ['id' => $product->id, 'status' => 'DISABLED']) }}" class="btn btn-block btn-danger"><span class="fas fa-trash"></span> Hizmet Dışı Yap</a>
-                @endif
-            </div>
-            <!-- /.card-body -->
+                                                <li class="list-group-item">
+                                                    <b>Muhatap Telefon</b> <a class="float-right">{{ $product->interlocutor_phone ?? '' }}</a>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <b>Durum</b>
+                                                    <a class="float-right">
+                                        <span class="badge badge-{{ $rentForm->rentFormStatus->color }}">
+                                            {{ __("rentFormStatuses.".$rentForm->rentFormStatus->name) }}
+                                        </span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <!-- /.card-body -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Kiralama Formu Malzeme Listesi</h3>
+                    </div>
+                    <div class="card-body">
+
+                        <table class="table table-striped">
+                            <thead>
+                            <th>Seri No</th>
+                            <th>Marka</th>
+                            <th>Model</th>
+                            <th>Adet</th>
+                            <th>Açıklama</th>
+                            <th>#</th>
+                            </thead>
+                            <tbody>
+                            @foreach($rentFormProducts as $rentFormProduct)
+                                <tr>
+                                    <td>{{ $rentFormProduct->product->serial_number }}</td>
+                                    <td>{{ $rentFormProduct->product->make }}</td>
+                                    <td>{{ $rentFormProduct->product->model }}</td>
+                                    <td>{{ $rentFormProduct->count ?? "--" }}</td>
+                                    <td>{{ $rentFormProduct->product->description }}</td>
+                                    <td>
+                                        <a type="button" href="{{ route('rentForms.removeProductFromActiveRentForm', ['id' => $rentForm->id, 'productId' => $rentFormProduct->product->id]) }}" class="btn btn-block btn-info"><span class="fas fa-minus"></span> Kiralamadan Al</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                        @if($rentFormProducts->count() <= 0)
+                            <p class="alert alert-info">Bu kiralamada bir malzeme kalmadı. Kiralamayı tamamlayabilirsiniz.</p>
+                        @endif
+                        <hr>
+                        <h3>Kiraya yeni malzeme gönder</h3>
+                        <table id="dt" class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>Seri No</th>
+                                <th>Kategori</th>
+                                <th>Marka</th>
+                                <th>Model</th>
+                                <th>Kullanılabilir Adet</th>
+                                <th>Durum</th>
+                                <th>#</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach ($products as $product)
+                                <tr>
+                                    <td>{{ $product->serial_number }}</td>
+                                    <td>{{ $product->category->name }}</td>
+                                    <td>{{ $product->make }}</td>
+                                    <td>{{ $product->model }}</td>
+                                    <td>@if(!empty($product->count)) {{ $product->count - $product->unavailable_count }} @else -- @endif</td>
+                                    <td>
+                                    <span class="badge badge-{{ $product->productStatus->color }}">
+                                        {{ __("productStatuses.".$product->productStatus->name) }}
+                                    </span>
+                                    </td>
+                                    <td>
+                                        @if($product->productStatus->name == 'IN_DEPOT' && ((!empty($product->count) && $product->count - $product->unavailable_count > 0) || empty($product->count)))
+                                            <a type="button" href="{{ route('rentForms.addForm', ['id' => $rentForm->id, 'productId' => $product->id, 'active' => true]) }}" class="btn btn-success"><span class="fas fa-search"></span> Kiralık Gönder</a>
+                                        @endif
+                                        <a type="button" target="_blank" href="{{ route('products.show', ['product' => $product->id]) }}" class="btn btn-primary"><span class="fas fa-search"></span> Malzeme Detayı</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
         </div>
-        <!-- /.card -->
     </div>
-    <!-- /.col -->
-    <div class="col-md-9">
-        <div class="card">
-            <div class="card-body">
-                <h2>Malzeme Hareketleri <small class="text-muted">(En son aksiyon en üstte)</small></h2>
-                <table class="table table-striped">
-                    <thead>
-                        <th>Aksiyon</th>
-                        <th>Adet</th>
-                        <th>Açıklama</th>
-                        <th>Kiralama Formu</th>
-                        <th>Tarih/Saat</th>
-                        <th>Kullanıcı</th>
-                    </thead>
-                    <tbody>
-                    @foreach($transactions as $transaction)
-                        <tr>
-                            <td>{{ __("actions.".$transaction->action->type) }}</td>
-                            <td>{{ $transaction->count ?? 1}}</td>
-                            <td>{{ $transaction->description }}</td>
-                            <td>@if(!empty($transaction->rentForm)) {{ $transaction->rentForm->company->name }}#{{ $transaction->rentForm->id }} @else -- @endif</td>
-                            <td>{{ $transaction->created_at->format('d/m/Y H:i') }}</td>
-                            <td>{{ $transaction->createdBy->name }}</td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <!-- /.card -->
-    </div>
-    <!-- /.col -->
-</div>
 @endsection
 
 @section('js')

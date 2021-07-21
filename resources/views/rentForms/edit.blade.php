@@ -41,6 +41,20 @@
                 @else
                     <h3 class="card-title">#{{ $rentForm->id }} {{ $rentForm->company->name }} kiralama formunun bilgilerini düzenle</h3>
                 @endif
+                <div class="float-right">
+                    @if(!$new)
+                        @if($rentForm->rentFormStatus->name == 'DRAFT')
+                            <a type="button" href="{{ route('rentForms.activateRentForm', ['id' => $rentForm->id]) }}" class="btn btn-success"><span class="fas fa-check"></span> Aktifleştir</a>
+                            <form class="d-inline delete" action="{{ action('App\Http\Controllers\RentFormController@destroy', ['rentForm' => $rentForm]) }}" method="post">
+                                {{ method_field('DELETE') }}
+                                {!! csrf_field() !!}
+                                <button type="submit" class="btn btn-danger"><span class="fas fa-trash"></span> Taslağı Sil</button>
+                            </form>
+                        @elseif($rentForm->rentFormStatus->name == 'ACTIVE')
+                            <a type="button" href="#" class="btn btn-info"><span class="fas fa-check"></span> Tamamlandı Olarak İşaretle</a>
+                        @endif
+                    @endif
+                </div>
             </div>
             <!-- /.card-header -->
             @if($new)
@@ -101,9 +115,9 @@
                             <label for="currency">Para Birimi</label>
                             <select class="form-control @error('currency') is-invalid @enderror" name="currency" id="currency">
                                 <option value="">Seçiniz</option>
-                                <option value="TL" @if((old('currency') ?? $rentForm->currency ?? '') == 'TL') selected @endif>₺</option>
-                                <option value="USD" @if((old('currency') ?? $rentForm->currency ?? '') == 'USD') selected @endif>$</option>
-                                <option value="EUR" @if((old('currency') ?? $rentForm->currency ?? '') == 'EUR') selected @endif>€</option>
+                                <option value="₺" @if((old('currency') ?? $rentForm->currency ?? '') == '₺') selected @endif>₺</option>
+                                <option value="$" @if((old('currency') ?? $rentForm->currency ?? '') == '$') selected @endif>$</option>
+                                <option value="€" @if((old('currency') ?? $rentForm->currency ?? '') == '€') selected @endif>€</option>
                             </select>
                             @error('currency')
                             <span class="error invalid-feedback">{{ $message }}</span>
@@ -147,7 +161,7 @@
                                     <td>{{ $rentFormProduct->product->serial_number }}</td>
                                     <td>{{ $rentFormProduct->product->make }}</td>
                                     <td>{{ $rentFormProduct->product->model }}</td>
-                                    <td>{{ $rentFormProduct->product->count ?? "--" }}</td>
+                                    <td>{{ $rentFormProduct->count ?? "--" }}</td>
                                     <td>{{ $rentFormProduct->product->description }}</td>
                                     <td>
                                         <a type="button" href="{{ route('rentForms.removeProductFromRentForm', ['id' => $rentForm->id, 'productId' => $rentFormProduct->product->id]) }}" class="btn btn-block btn-danger"><span class="fas fa-minus"></span> Formdan Çıkart</a>
@@ -201,49 +215,6 @@
         @endif
     </div>
 </div>
-
-<div class="modal fade" id="addToFormModal" tabindex="-1" role="dialog" aria-labelledby="addToFormModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addToFormModalLabel"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Kapat">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="card card-primary card-outline">
-                    <div class="card-body box-profile">
-                        <h3 class="profile-username text-center" id="modal-product-make-model">...</h3>
-                        <p class="text-muted text-center">ID: <a target="_blank" id="modal-product-id" href="#">#...</a></p>
-                        <ul class="list-group list-group-unbordered mb-3">
-                            <li class="list-group-item">
-                                <b>Seri Numarası</b> <a class="float-right" id="modal-product-serial-no">...</a>
-                            </li>
-                            <li class="list-group-item" id="modal-product-available-count-item">
-                                <b>Kullanılabilir Adet</b> <a class="float-right" id="modal-product-available-count">...</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <form id="modal-form">
-                    <div class="form-group" id="count-modal-form-control">
-                        <label for="modal-count" class="col-form-label">Kullanılacak Adet <i class="text-danger">*</i></label>
-                        <input type="number" min="1" max="" class="form-control" id="modal-count" name="modal-count" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="modal-description" class="col-form-label">Açıklama</label>
-                        <textarea class="form-control" name="modal-description" id="modal-description"></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="add-to-form-modal-button">Forma Ekle</button>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
 
 @section('js')
@@ -263,45 +234,9 @@
 
     <script>
         $(function () {
-            // addProductToFormButton
-            // selectedProducts [tbody] .push(tr)
-
-            $('#addToFormModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget) // Button that triggered the modal
-
-                var productId = button.data('product-id')
-                var productSerialNo = button.data('product-serial-number')
-                var productMakeModel = button.data('product-make-model')
-                var availableCount = button.data('available-count')
-                console.log('availableCount:', availableCount)
-
-                if (availableCount) {
-                    $('#modal-count').attr('max', availableCount)
-                    $('#modal-product-available-count').text(availableCount)
-                } else {
-                    $('#count-modal-form-control').remove()
-                    $('#modal-product-available-count-item').remove()
-                }
-
-                $('#modal-product-make-model').text(productMakeModel)
-                $('#modal-product-serial-no').text(productSerialNo)
-                $('#modal-product-id').attr('href', "/products/" + productId)
-                $('#modal-product-id').text(`#${productId}`)
-
-                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-                var modal = $(this)
-                modal.find('.modal-title').text('Forma Ürün Ekle ' + productMakeModel)
-            })
-
-            $('#add-to-form-modal-button').on('click', function () {
-                var form = document.querySelector('#modal-form')
-                if (form.reportValidity()) {
-                    let request = $(form).serializeArray()
-                    console.log("request:", request)
-                    alert("form submit");
-                }
-            })
+            $(".delete").on("submit", function(){
+                return confirm("Bu taslağı silmek istediğinden emin misin?");
+            });
 
             $('#dt').DataTable({
                 language: {

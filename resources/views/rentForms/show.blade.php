@@ -42,9 +42,11 @@
                                                 <li class="list-group-item">
                                                     <b>Oluşturulma Tarihi / Oluşturan</b> <a class="float-right">{{ $rentForm->created_at->format('d/m/Y H:i') }} / {{ $rentForm->createdBy->name }}</a>
                                                 </li>
-                                                <li class="list-group-item">
-                                                    <b>Düzenlenme Tarihi / Düzenleyen</b> <a class="float-right">{{ $rentForm->updated_at->format('d/m/Y H:i') }} / {{ $rentForm->updatedBy->name }}</a>
-                                                </li>
+                                                @if(!empty($rentForm->updated_at) && !empty($rentForm->updatedBy))
+                                                    <li class="list-group-item">
+                                                        <b>Düzenlenme Tarihi / Düzenleyen</b> <a class="float-right">{{ $rentForm->updated_at->format('d/m/Y H:i') }} / {{ $rentForm->updatedBy->name }}</a>
+                                                    </li>
+                                                @endif
                                                 <li class="list-group-item">
                                                     <b>Muhatap İsmi</b> <a class="float-right">{{ $rentForm->interlocutor_name ?? '' }}</a>
                                                 </li>
@@ -103,7 +105,7 @@
                                     <td>{{ $rentFormProduct->product->description }}</td>
                                     <td>
                                         <a type="button" target="_blank" href="{{ route('products.show', ['product' => $rentFormProduct->product->id]) }}" class="btn btn-primary"><span class="fas fa-search"></span> Malzeme Detayı</a>
-                                        <a type="button" href="{{ route('rentForms.removeProductFromActiveRentForm', ['id' => $rentForm->id, 'productId' => $rentFormProduct->product->id]) }}" class="btn btn-block btn-info"><span class="fas fa-minus"></span> Kiralamadan Al</a>
+                                        <a type="button" href="{{ route('rentForms.removeProductFromActiveRentForm', ['id' => $rentForm->id, 'productId' => $rentFormProduct->product->id]) }}" class="btn btn-danger"><span class="fas fa-minus"></span> Kiralamadan Al</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -141,7 +143,7 @@
                                     </td>
                                     <td>
                                         @if($product->productStatus->name == 'IN_DEPOT' && ((!empty($product->count) && $product->count - $product->unavailable_count > 0) || empty($product->count)))
-                                            <a type="button" href="{{ route('rentForms.addForm', ['id' => $rentForm->id, 'productId' => $product->id, 'active' => true]) }}" class="btn btn-success"><span class="fas fa-search"></span> Kiralık Gönder</a>
+                                            <a type="button" href="{{ route('rentForms.addForm', ['id' => $rentForm->id, 'productId' => $product->id, 'active' => 'true']) }}" class="btn btn-success"><span class="fas fa-search"></span> Kiralık Gönder</a>
                                         @endif
                                         <a type="button" target="_blank" href="{{ route('products.show', ['product' => $product->id]) }}" class="btn btn-primary"><span class="fas fa-search"></span> Malzeme Detayı</a>
                                     </td>

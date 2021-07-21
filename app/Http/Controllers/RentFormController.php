@@ -156,7 +156,9 @@ class RentFormController extends Controller
             'description' => $request->get('description')
         ];
         if (!empty($rentFormProduct->count) && $rentFormProduct->count > 0) {
-            $product->unavailable_count -= $rentFormProduct->count;
+            if ($request->get('product_status') == 'IN_DEPOT') {
+                $product->unavailable_count -= $rentFormProduct->count;
+            }
             $requestPayload['count'] = $rentFormProduct->count;
         }
         ProductTransaction::create($requestPayload);

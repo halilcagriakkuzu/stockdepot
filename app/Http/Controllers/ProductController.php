@@ -127,23 +127,21 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
+
         $validated = $request->validate([
+            'category_id' => 'required',
             'serial_number' => 'nullable',
             'make' => 'required',
             'model' => 'required',
             'shelf_no' => 'nullable',
             'row_no' => 'nullable',
             'count' => 'nullable',
-            'unavailable_count' => 'nullable',
             'description' => 'nullable',
             'buy_price' => 'nullable',
             'buy_date' => 'nullable',
-            'product_status_id' => 'required',
-            'category_id' => 'required',
         ]);
 
         $validated['buy_date'] = date_create_from_format("d/m/Y", $validated['buy_date']);
-        $validated['product_status_id'] = ProductStatus::where('name', '=', Product::STATUS_IN_DEPOT)->first()->id;
 
         $product->update($validated);
         $request->session()->flash('success', 'Malzeme başarıyla düzenlendi!');

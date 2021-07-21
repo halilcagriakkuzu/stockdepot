@@ -26,14 +26,7 @@ class ProductStatusController extends Controller
         $statusMaintenance = ProductStatus::where('name', '=', 'IN_MAINTENANCE')->firstOrFail();
         $actionMaintenance = Action::where('type', '=', 'SEND_TO_MAINTENANCE_FROM_DEPOT')->firstOrFail();
         if ($product->productStatus->name == 'RENTED') {
-            $rentFormProduct = RentFormProduct::where('product_id', '=', $id)
-                ->orderBy('created_at', 'DESC')
-                ->firstOrFail();
-
             $actionMaintenance = Action::where('type', '=', 'RENT_BACK_FROM_COMPANY_TO_MAINTENANCE')->firstOrFail();
-            $rentFormProduct->deleted_by = Auth::user()->id;
-            $rentFormProduct->save();
-            $rentFormProduct->delete();
         }
 
         $requestPayload = [
@@ -42,6 +35,17 @@ class ProductStatusController extends Controller
             'action_id' => $actionMaintenance->id,
             'description' => $request->get('description')
         ];
+
+        if ($product->productStatus->name == 'RENTED') {
+            $rentFormProduct = RentFormProduct::where('product_id', '=', $id)
+                ->orderBy('created_at', 'DESC')
+                ->firstOrFail();
+            $requestPayload['count'] = $rentFormProduct->count;
+            $rentFormProduct->deleted_by = Auth::user()->id;
+            $rentFormProduct->save();
+            $rentFormProduct->delete();
+        }
+
         ProductTransaction::create($requestPayload);
 
         $product->product_status_id = $statusMaintenance->id;
@@ -78,12 +82,20 @@ class ProductStatusController extends Controller
         $actionMaintenance = Action::where('type', '=', 'SEND_TO_DEPOT_FROM_MAINTENANCE')->firstOrFail();
 
         $product = Product::findOrFail($id);
+        $actionsForMaintenance = Action::whereIn('type', ['RENT_BACK_FROM_COMPANY_TO_MAINTENANCE', 'SEND_TO_MAINTENANCE_FROM_DEPOT'])->get();
+        $productLastMaintenance = ProductTransaction::whereIn('action_id', $actionsForMaintenance->pluck('id'))
+            ->orderBy('created_at', 'DESC')
+            ->first();
         $requestPayload = [
             'product_id' => $product->id,
             'created_by' => Auth::user()->id,
             'action_id' => $actionMaintenance->id,
             'description' => $request->get('description')
         ];
+        if (!empty($productLastMaintenance) && !empty($productLastMaintenance->count) && $productLastMaintenance->count > 0) {
+            $product->unavailable_count -= $productLastMaintenance->count;
+            $requestPayload['count'] = $productLastMaintenance->count;
+        }
         ProductTransaction::create($requestPayload);
 
         $product->product_status_id = $statusMaintenance->id;

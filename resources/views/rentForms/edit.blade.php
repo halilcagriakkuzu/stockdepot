@@ -201,7 +201,7 @@
                                 </td>
                                 <td>
                                     @if($product->productStatus->name == 'IN_DEPOT' && ((!empty($product->count) && $product->count - $product->unavailable_count > 0) || empty($product->count)))
-                                        <a type="button" href="{{ route('rentForms.addForm', ['id' => $rentForm->id, 'productId' => $product->id]) }}" class="btn btn-success"><span class="fas fa-search"></span> Forma Ekle</a>
+                                        <a type="button" href="{{ route('rentForms.addForm', ['id' => $rentForm->id, 'productId' => $product->id, c'false']) }}" class="btn btn-success"><span class="fas fa-search"></span> Forma Ekle</a>
                                     @endif
                                     <a type="button" target="_blank" href="{{ route('products.show', ['product' => $product->id]) }}" class="btn btn-primary"><span class="fas fa-search"></span> Malzeme Detayı</a>
                                 </td>

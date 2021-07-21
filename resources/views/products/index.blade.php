@@ -32,10 +32,12 @@
                     <thead>
                         <tr>
                             <th>Id</th>
+                            <th>Kategori</th>
                             <th>Seri No</th>
                             <th>Marka</th>
                             <th>Model</th>
-                            <th>Kategori</th>
+                            <th>Toplam Stok</th>
+                            <th>Kullanılabilir Stok</th>
                             <th>Durum</th>
                             <th>#</th>
                         </tr>
@@ -44,10 +46,12 @@
                     @foreach ($products as $product)
                         <tr>
                             <td>{{ $product->id }}</td>
+                            <td>{{ $product->category->name }}</td>
                             <td>{{ $product->serial_number }}</td>
                             <td>{{ $product->make }}</td>
                             <td>{{ $product->model }}</td>
-                            <td>{{ $product->category->name }}</td>
+                            <td>{{ $product->count ?? '--' }}</td>
+                            <td>@if(!empty($product->count)) {{ $product->count - $product->unavailable_count }} @else -- @endif</td>
                             <td>
                                 <span class="badge badge-{{ $product->productStatus->color }}">
                                     {{ __("productStatuses.".$product->productStatus->name) }}

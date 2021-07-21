@@ -54,7 +54,11 @@
                                 </span>
                             </td>
                             <td>
+                                @if($rentForm->rentFormStatus->name == 'DRAFT')
+                                <a type="button" href="{{ route('rentForms.edit', ['rentForm' => $rentForm->id, 'active' => 'false']) }}" class="btn btn-warning"><span class="fas fa-pencil-alt"></span> Form Düzenle</a>
+                                @else
                                 <a type="button" href="{{ route('rentForms.show', ['rentForm' => $rentForm->id]) }}" class="btn btn-primary"><span class="fas fa-search"></span> Form Detayı</a>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

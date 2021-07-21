@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductStatus;
 use App\Models\ProductTransaction;
+use App\Models\RentFormProduct;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,10 +22,20 @@ class ProductStatusController extends Controller
 
     public function sendToMaintenance(Request $request, $id)
     {
+        $product = Product::findOrFail($id);
         $statusMaintenance = ProductStatus::where('name', '=', 'IN_MAINTENANCE')->firstOrFail();
         $actionMaintenance = Action::where('type', '=', 'SEND_TO_MAINTENANCE_FROM_DEPOT')->firstOrFail();
+        if ($product->productStatus->name == 'RENTED') {
+            $rentFormProduct = RentFormProduct::where('product_id', '=', $id)
+                ->orderBy('created_at', 'DESC')
+                ->firstOrFail();
 
-        $product = Product::findOrFail($id);
+            $actionMaintenance = Action::where('type', '=', 'RENT_BACK_FROM_COMPANY_TO_MAINTENANCE')->firstOrFail();
+            $rentFormProduct->deleted_by = Auth::user()->id;
+            $rentFormProduct->save();
+            $rentFormProduct->delete();
+        }
+
         $requestPayload = [
             'product_id' => $product->id,
             'created_by' => Auth::user()->id,

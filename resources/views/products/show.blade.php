@@ -74,6 +74,7 @@
                 @if($product->productStatus->name == 'IN_DEPOT' || $product->productStatus->name == 'RENTED' || $product->productStatus->name == 'IN_MAINTENANCE')
                     <a type="button" href="{{ route('productStatus.changeProductStatus', ['id' => $product->id, 'status' => 'DISABLED']) }}" class="btn btn-block btn-danger"><span class="fas fa-trash"></span> Hizmet Dışı Yap</a>
                 @endif
+                <a type="button" href="{{ route('products.edit', ['product' => $product]) }}" class="btn btn-block btn-warning"><span class="fas fa-edit"></span> Düzenle</a>
             </div>
             <!-- /.card-body -->
         </div>

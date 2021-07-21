@@ -45,6 +45,10 @@ class ProductStatusController extends Controller
             $rentFormProduct->save();
             $rentFormProduct->delete();
         }
+        if ($request->has('count')) {
+            $product->unavailable_count += $request->get('count');
+            $requestPayload['count'] = $request->get('count');
+        }
 
         ProductTransaction::create($requestPayload);
 

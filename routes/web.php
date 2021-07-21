@@ -19,12 +19,16 @@ Route::post('/products/{id}/change-status-maintenance', [App\Http\Controllers\Pr
 Route::post('/products/{id}/change-status-disabled', [App\Http\Controllers\ProductStatusController::class, 'markAsDisabled'])->name('productStatus.markAsDisabled');
 Route::post('/products/{id}/change-status-depot', [App\Http\Controllers\ProductStatusController::class, 'sendToDepot'])->name('productStatus.sendToDepot');
 Route::get('/depots/maintenance', [App\Http\Controllers\DepotController::class, 'showMaintenance'])->name('depots.showMaintenance');
+Route::get('/rentForms/{id}/addProduct/{productId}', [App\Http\Controllers\RentFormController::class, 'addForm'])->name('rentForms.addForm');
+Route::post('/rentForms/{id}/addProduct/{productId}', [App\Http\Controllers\RentFormController::class, 'addFormStore'])->name('rentForms.addFormStore');
+Route::get('/rentForms/{id}/removeProduct/{productId}', [App\Http\Controllers\RentFormController::class, 'removeProductFromRentForm'])->name('rentForms.removeProductFromRentForm');
 
 Route::resource('users', \App\Http\Controllers\UserController::class);
 Route::resource('depots', \App\Http\Controllers\DepotController::class);
 Route::resource('companies', \App\Http\Controllers\CompanyController::class);
 Route::resource('categories', \App\Http\Controllers\CategoryController::class);
 Route::resource('products', \App\Http\Controllers\ProductController::class);
+Route::resource('rentForms', \App\Http\Controllers\RentFormController::class);
 
 /** AUTH */
 Auth::routes();

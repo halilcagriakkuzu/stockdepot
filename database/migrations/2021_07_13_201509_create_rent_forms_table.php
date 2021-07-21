@@ -19,7 +19,7 @@ class CreateRentFormsTable extends Migration
             $table->string('interlocutor_email')->nullable();
             $table->string('interlocutor_phone')->nullable();
             $table->decimal('price')->nullable();
-            $table->string('currency')->default('TL');
+            $table->string('currency')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

@@ -153,7 +153,7 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="{{ route('rentForms.create') }}" class="nav-link {{Route::currentRouteName() == 'rentForms.create' ? 'active' : '' }}">
                                     <i class="fas fa-plus-circle nav-icon"></i>
                                     <p>Yeni Kiralama</p>
                                 </a>

@@ -23,6 +23,10 @@ class RentForm extends Model
         'interlocutor_phone',
         'price',
         'currency',
+        'rent_form_status_id',
+        'company_id',
+        'created_by',
+        'updated_by',
     ];
 
     /**
@@ -50,6 +54,15 @@ class RentForm extends Model
     public function productTransactions(): HasMany
     {
         return $this->hasMany(ProductTransaction::class);
+    }
+
+    /**
+     * RentForm has many rentFormProducts
+     * @return HasMany
+     */
+    public function rentFormProducts(): HasMany
+    {
+        return $this->hasMany(RentFormProduct::class);
     }
 
     /**

@@ -28,6 +28,6 @@ class CreateProductStatusesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rent_form_statuses');
+        Schema::dropIfExists('product_statuses');
     }
 }

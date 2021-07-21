@@ -16,7 +16,7 @@ class ProductSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        for ($i = 1; $i <= 2500; $i++) {
+        for ($i = 1; $i <= 1111; $i++) {
             DB::table('products')->insert([
                 'serial_number' => $faker->randomLetter().$faker->randomLetter().$faker->buildingNumber(),
                 'make' => $faker->company(),

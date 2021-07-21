@@ -23,7 +23,7 @@
                 <h3 class="card-title">Forma malzeme ekle</h3>
             </div>
             <!-- /.card-header -->
-            <form action="{{ action('App\Http\Controllers\RentFormController@addFormStore', ['id' => $rentForm->id, 'productId' => $product->id]) }}" method="post">
+            <form action="{{ action('App\Http\Controllers\RentFormController@addFormStore', ['id' => $rentForm->id, 'productId' => $product->id, 'active' => $active]) }}" method="post">
                 {{ method_field('POST') }}
                 {!! csrf_field() !!}
                 <div class="card-body">

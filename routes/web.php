@@ -19,8 +19,8 @@ Route::post('/products/{id}/change-status-maintenance', [App\Http\Controllers\Pr
 Route::post('/products/{id}/change-status-disabled', [App\Http\Controllers\ProductStatusController::class, 'markAsDisabled'])->name('productStatus.markAsDisabled');
 Route::post('/products/{id}/change-status-depot', [App\Http\Controllers\ProductStatusController::class, 'sendToDepot'])->name('productStatus.sendToDepot');
 Route::get('/depots/maintenance', [App\Http\Controllers\DepotController::class, 'showMaintenance'])->name('depots.showMaintenance');
-Route::get('/rentForms/{id}/addProduct/{productId}', [App\Http\Controllers\RentFormController::class, 'addForm'])->name('rentForms.addForm');
-Route::post('/rentForms/{id}/addProduct/{productId}', [App\Http\Controllers\RentFormController::class, 'addFormStore'])->name('rentForms.addFormStore');
+Route::get('/rentForms/{id}/addProduct/{productId}/{active}', [App\Http\Controllers\RentFormController::class, 'addForm'])->name('rentForms.addForm');
+Route::post('/rentForms/{id}/addProduct/{productId}/{active}', [App\Http\Controllers\RentFormController::class, 'addFormStore'])->name('rentForms.addFormStore');
 Route::get('/rentForms/{id}/removeProduct/{productId}', [App\Http\Controllers\RentFormController::class, 'removeProductFromRentForm'])->name('rentForms.removeProductFromRentForm');
 Route::get('/rentForms/{id}/activate', [App\Http\Controllers\RentFormController::class, 'activateRentForm'])->name('rentForms.activateRentForm');
 Route::get('/rentForms/{id}/removeProductFromActive/{productId}', [App\Http\Controllers\RentFormController::class, 'removeProductFromActiveRentForm'])->name('rentForms.removeProductFromActiveRentForm');

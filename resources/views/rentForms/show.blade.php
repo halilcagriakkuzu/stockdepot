@@ -110,7 +110,7 @@
                             </tbody>
                         </table>
                         @if($rentFormProducts->count() <= 0)
-                            <p class="alert alert-info">Bu kiralamada bir malzeme kalmadı. Kiralamayı tamamlayabilirsiniz.</p>
+                            <p class="alert alert-info">Bu kiralamada bir malzeme kalmadı. Kiralamayı tamamlayabilirsiniz yada yeni bir malzeme ekleyerek devam ettirebilirsiniz.</p>
                         @endif
                         <hr>
                         <h3>Kiraya yeni malzeme gönder</h3>

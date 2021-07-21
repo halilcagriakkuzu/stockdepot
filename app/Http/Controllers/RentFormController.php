@@ -222,7 +222,7 @@ class RentFormController extends Controller
     {
         $rentForm = RentForm::findOrFail($id);
         $product = Product::findOrFail($productId);
-
+        $redirectRoute = 'rentForms.edit';
         $validated = $request->validate([
             'description' => 'nullable',
             'count' => 'nullable',
@@ -232,15 +232,28 @@ class RentFormController extends Controller
         $validated['product_id'] = $product->id;
         $validated['created_by'] = Auth::user()->id;
 
-        if ($active && array_key_exists('count', $validated) && $validated['count'] > 0) {
-            // TODO: !!!
-            $product->unavailable_count += $validated['count'];
+        if ($active) {
+            $redirectRoute = 'rentForms.show';
+            $status = ProductStatus::where('name', '=', 'RENTED')->firstOrFail();
+            $action = Action::where('type', '=', 'RENT_TO_COMPANY')->firstOrFail();
+            $requestPayload = [
+                'product_id' => $product->id,
+                'created_by' => Auth::user()->id,
+                'action_id' => $action->id,
+                'description' => $request->get('description')
+            ];
+            if(array_key_exists('count', $validated) && $validated['count'] > 0) {
+                $product->unavailable_count += $validated['count'];
+                $requestPayload['count'] = $validated['count'];
+            }
+            ProductTransaction::create($requestPayload);
+            $product->product_status_id = $status->id;
+
             $product->save();
         }
-
         $rentFormProduct = RentFormProduct::create($validated);
         $request->session()->flash('success', 'Malzeme başarıyla eklendi!');
-        return redirect()->route('rentForms.edit', ['rentForm' => $rentForm->id]);
+        return redirect()->route($redirectRoute, ['rentForm' => $rentForm->id]);
     }
 
     /**

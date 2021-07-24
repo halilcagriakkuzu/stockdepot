@@ -45,14 +45,22 @@ class ProductStatusController extends Controller
             $rentFormProduct->save();
             $rentFormProduct->delete();
         }
+
         if ($request->has('count')) {
             $product->unavailable_count += $request->get('count');
+            $product->maintenance_count += $request->get('count');
             $requestPayload['count'] = $request->get('count');
+
+            if ($product->count - $product->unavailable_count <= 0) {
+                $status = ProductStatus::where('name', '=', 'OUT_OF_STOCK')->firstOrFail();
+                $product->product_status_id = $status->id;
+            }
+        } else {
+            $product->product_status_id = $statusMaintenance->id;
         }
 
         ProductTransaction::create($requestPayload);
 
-        $product->product_status_id = $statusMaintenance->id;
         $product->save();
 
         Session::flash('success', "Ürün ölçü/bakım'a gönderildi!");
@@ -82,27 +90,25 @@ class ProductStatusController extends Controller
 
     public function sendToDepot(Request $request, $id)
     {
-        $statusMaintenance = ProductStatus::where('name', '=', 'IN_DEPOT')->firstOrFail();
-        $actionMaintenance = Action::where('type', '=', 'SEND_TO_DEPOT_FROM_MAINTENANCE')->firstOrFail();
+        $status = ProductStatus::where('name', '=', 'IN_DEPOT')->firstOrFail();
+        $action = Action::where('type', '=', 'SEND_TO_DEPOT_FROM_MAINTENANCE')->firstOrFail();
 
         $product = Product::findOrFail($id);
-        $actionsForMaintenance = Action::whereIn('type', ['RENT_BACK_FROM_COMPANY_TO_MAINTENANCE', 'SEND_TO_MAINTENANCE_FROM_DEPOT'])->get();
-        $productLastMaintenance = ProductTransaction::whereIn('action_id', $actionsForMaintenance->pluck('id'))
-            ->orderBy('created_at', 'DESC')
-            ->first();
+
         $requestPayload = [
             'product_id' => $product->id,
             'created_by' => Auth::user()->id,
-            'action_id' => $actionMaintenance->id,
+            'action_id' => $action->id,
             'description' => $request->get('description')
         ];
-        if (!empty($productLastMaintenance) && !empty($productLastMaintenance->count) && $productLastMaintenance->count > 0) {
-            $product->unavailable_count -= $productLastMaintenance->count;
-            $requestPayload['count'] = $productLastMaintenance->count;
+        if ($product->maintenance_count > 0) {
+            $product->unavailable_count -= $request->get('count');
+            $product->maintenance_count -= $request->get('count');
+            $requestPayload['count'] = $request->get('count');
         }
         ProductTransaction::create($requestPayload);
 
-        $product->product_status_id = $statusMaintenance->id;
+        $product->product_status_id = $status->id;
         $product->save();
 
         Session::flash('success', "Ürün depoya gönderildi!");

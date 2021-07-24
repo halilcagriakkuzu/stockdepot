@@ -71,7 +71,7 @@
                 @if($product->productStatus->name == 'IN_DEPOT' || $product->productStatus->name == 'RENTED')
                     <a type="button" href="{{ route('productStatus.changeProductStatus', ['id' => $product->id, 'status' => 'IN_MAINTENANCE']) }}" class="btn btn-block btn-info"><span class="fas fa-tools"></span> Ölçü Bakıma Gönder</a>
                 @endif
-                @if($product->productStatus->name == 'IN_MAINTENANCE')
+                @if($product->productStatus->name == 'IN_MAINTENANCE' || $product->maintenance_count > 0)
                     <a type="button" href="{{ route('productStatus.changeProductStatus', ['id' => $product->id, 'status' => 'IN_DEPOT']) }}" class="btn btn-block btn-success"><span class="fas fa-warehouse"></span> Depoya Gönder</a>
                 @endif
                 @if($product->productStatus->name == 'IN_DEPOT' || $product->productStatus->name == 'RENTED' || $product->productStatus->name == 'IN_MAINTENANCE')

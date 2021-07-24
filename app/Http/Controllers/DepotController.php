@@ -90,8 +90,14 @@ class DepotController extends Controller
             ->where('product_statuses.name', '=', Product::STATUS_IN_MAINTENANCE)
             ->get();
 
+        $countableProducts = Product::select('products.*', 'categories.name')
+            ->join('categories', 'categories.id', 'products.category_id')
+            ->where('maintenance_count', '>', 0)
+            ->get();
+
+
         return view('depots.show', [
-            'products' => $products
+            'products' => $products->merge($countableProducts)
         ]);
     }
 

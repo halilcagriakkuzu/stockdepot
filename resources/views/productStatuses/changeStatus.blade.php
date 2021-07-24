@@ -59,10 +59,10 @@
                             Malzeme kullanım dışı olarak işaretlendikten sonra kullanılamaz, kiralama formlarında görünmez. Depodan çıkartılan, tamiri mümkün olmayacak şekilde bozulan, hasar gören ve bir daha kullanılmayacak ürünleri kullanım dışı olarak işaretlemelisiniz.
                         </p>
                     @endif
-                    @if($status->name == 'IN_MAINTENANCE')
+                    @if ($product->count > 0)
                         <div class="form-group">
-                            <label for="count">Bakıma Gönderilecek Adet <i>(Kullanılabilir: <b>{{ $product->count - $product->unavailable_count }}</b>)</i> <i class="text-danger">*</i></label>
-                            <input class="form-control @error('count') is-invalid @enderror" type="number" min="1" max="{{ $product->count - $product->unavailable_count }}" name="count" id="count" value="{{ old('count') ?? '' }}" placeholder="Gönderilecek Adet" required>
+                            <label for="count">Adet</label>
+                            <input class="form-control @error('count') is-invalid @enderror" type="number"  min="1" max="{{ $status->name == 'IN_DEPOT' ? $product->maintenance_count : $product->count - $product->unavailable_count }}" name="count" id="count" value="{{ old('count') ?? '' }}" placeholder="İşlem yapılacak adet" required>
                             @error('count')
                             <span class="error invalid-feedback">{{ $message }}</span>
                             @enderror

@@ -50,6 +50,7 @@
                         <th>Kategori</th>
                         <th>Marka</th>
                         <th>Model</th>
+                        <th>Bakımdaki Adet</th>
                         <th>#</th>
                     </tr>
                     </thead>
@@ -60,6 +61,7 @@
                             <td>{{ $product->category->name }}</td>
                             <td>{{ $product->make }}</td>
                             <td>{{ $product->model }}</td>
+                            <td>{{ $product->maintenance_count ?? '--' }}</td>
                             <td>
                                 <a type="button" href="{{ route('products.show', ['product' => $product->id]) }}" class="btn btn-primary"><span class="fas fa-search"></span> Malzeme Detayı</a>
                             </td>

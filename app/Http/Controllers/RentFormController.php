@@ -125,10 +125,14 @@ class RentFormController extends Controller
             ->with('category')
             ->where('products.id', '=', $productId)
             ->firstOrFail();
+        $rentFormProduct = RentFormProduct::where('product_id', '=', $productId)
+            ->where('rent_form_id', '=', $id)
+            ->firstOrFail();
         $productStatuses = ProductStatus::whereIn('name', ['IN_DEPOT', 'IN_MAINTENANCE'])->get();
         return view('rentForms.removeProductFromActiveRentForm', [
             'product' => $product,
             'rentForm' => $rentForm,
+            'rentFormProduct' => $rentFormProduct,
             'productStatuses' => $productStatuses
         ]);
     }
@@ -140,6 +144,7 @@ class RentFormController extends Controller
         $rentFormProduct = RentFormProduct::where('product_id', '=', $productId)
             ->where('rent_form_id', '=', $id)
             ->firstOrFail();
+        $isStockProduct = false;
 
         if ($request->get('product_status') == 'IN_DEPOT') {
             $status = ProductStatus::where('name', '=', 'IN_DEPOT')->firstOrFail();
@@ -156,18 +161,39 @@ class RentFormController extends Controller
             'description' => $request->get('description')
         ];
         if (!empty($rentFormProduct->count) && $rentFormProduct->count > 0) {
-            if ($request->get('product_status') == 'IN_DEPOT') {
-                $product->unavailable_count -= $rentFormProduct->count;
+            $isStockProduct = true;
+            if ($request->get('product_status') != 'IN_MAINTENANCE') {
+                $product->unavailable_count -= $request->get('count');
+                $product->save();
             }
-            $requestPayload['count'] = $rentFormProduct->count;
+            $requestPayload['count'] = $request->get('count');
         }
         ProductTransaction::create($requestPayload);
-        $product->product_status_id = $status->id;
+        if ($isStockProduct) {
+            // COUNT PRODUCT
+            if ($request->get('product_status') != 'IN_MAINTENANCE') {
+                $product->product_status_id = $status->id;
+            }
 
-        $product->save();
-        $rentFormProduct->deleted_by = Auth::user()->id;
-        $rentFormProduct->save();
-        $rentFormProduct->delete();
+            if ($product->unavailable_count == 0) {
+                $rentFormProduct->deleted_by = Auth::user()->id;
+                $rentFormProduct->save();
+                $rentFormProduct->delete();
+
+            } else {
+                $rentFormProduct->count -= $request->get('count');
+                $rentFormProduct->save();
+            }
+
+            $product->save();
+        } else {
+            // SN PRODUCT
+            $product->product_status_id = $status->id;
+            $rentFormProduct->deleted_by = Auth::user()->id;
+            $rentFormProduct->save();
+            $rentFormProduct->delete();
+            $product->save();
+        }
 
         $request->session()->flash('success', 'Malzeme başarıyla eklendi!');
         return redirect()->route('rentForms.show', ['rentForm' => $rentForm->id]);
@@ -234,9 +260,9 @@ class RentFormController extends Controller
         $validated['product_id'] = $product->id;
         $validated['created_by'] = Auth::user()->id;
 
-        if ($active) {
+        if ($active == "true") {
+            $isStockProduct = false;
             $redirectRoute = 'rentForms.show';
-            $status = ProductStatus::where('name', '=', 'RENTED')->firstOrFail();
             $action = Action::where('type', '=', 'RENT_TO_COMPANY')->firstOrFail();
             $requestPayload = [
                 'product_id' => $product->id,
@@ -244,12 +270,20 @@ class RentFormController extends Controller
                 'action_id' => $action->id,
                 'description' => $request->get('description')
             ];
-            if(array_key_exists('count', $validated) && $validated['count'] > 0) {
+            if (array_key_exists('count', $validated) && $validated['count'] > 0) {
+                $isStockProduct = true;
                 $product->unavailable_count += $validated['count'];
                 $requestPayload['count'] = $validated['count'];
             }
             ProductTransaction::create($requestPayload);
-            $product->product_status_id = $status->id;
+
+            if ($isStockProduct && $product->unavailable_count >= $product->count) {
+                $status = ProductStatus::where('name', '=', 'OUT_OF_STOCK')->firstOrFail();
+                $product->product_status_id = $status->id;
+            } else if (!$isStockProduct) {
+                $status = ProductStatus::where('name', '=', 'RENTED')->firstOrFail();
+                $product->product_status_id = $status->id;
+            }
 
             $product->save();
         }
@@ -307,9 +341,8 @@ class RentFormController extends Controller
         ->findOrFail($id);
 
         foreach ($rentForm->rentFormProducts as $rentFormProduct) {
-            $statusRented = ProductStatus::where('name', '=', 'RENTED')->firstOrFail();
             $actionRented = Action::where('type', '=', 'RENT_TO_COMPANY')->firstOrFail();
-
+            $isStockProduct = false;
             $product = Product::findOrFail($rentFormProduct->product->id);
             $requestPayload = [
                 'product_id' => $product->id,
@@ -318,11 +351,19 @@ class RentFormController extends Controller
                 'description' => $rentFormProduct->description
             ];
             if (!empty($rentFormProduct->count) && $rentFormProduct->count > 0) {
+                $isStockProduct = true;
                 $product->unavailable_count += $rentFormProduct->count;
                 $requestPayload['count'] = $rentFormProduct->count;
             }
             ProductTransaction::create($requestPayload);
-            $product->product_status_id = $statusRented->id;
+            if ($isStockProduct && $product->unavailable_count >= $product->count) {
+                $statusOutOfStock = ProductStatus::where('name', '=', 'OUT_OF_STOCK')->firstOrFail();
+                $product->product_status_id = $statusOutOfStock->id;
+            } else if (!$isStockProduct) {
+                $statusRented = ProductStatus::where('name', '=', 'RENTED')->firstOrFail();
+                $product->product_status_id = $statusRented->id;
+            }
+
             $product->save();
         }
 

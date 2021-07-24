@@ -37,5 +37,17 @@ class ProductStatusSeeder extends Seeder
             'description' => 'malzeme kullanım dışı',
             'color' => 'danger',
         ]);
+
+        DB::table('product_statuses')->insert([
+            'name' => 'OUT_OF_STOCK',
+            'description' => 'malzeme stoklarda kalmadı',
+            'color' => 'danger',
+        ]);
+
+        DB::table('product_statuses')->insert([
+            'name' => 'OUT_OF_STOCK_IN_MAINTENANCE',
+            'description' => 'Stoklarda Yok/Ölçü Bakımda Var',
+            'color' => 'danger',
+        ]);
     }
 }

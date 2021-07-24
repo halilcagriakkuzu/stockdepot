@@ -60,10 +60,6 @@
                                                 <li class="list-group-item">
                                                     <b>Ücret</b> <a class="float-right">{{ $rentForm->price ?? '' }} {{ $rentForm->currency ?? '' }}</a>
                                                 </li>
-
-                                                <li class="list-group-item">
-                                                    <b>Muhatap Telefon</b> <a class="float-right">{{ $product->interlocutor_phone ?? '' }}</a>
-                                                </li>
                                                 <li class="list-group-item">
                                                     <b>Durum</b>
                                                     <a class="float-right">

@@ -90,13 +90,22 @@
                         <select class="form-control  @error('product_status') is-invalid @enderror" name="product_status" id="product_status" required>
                             <option value="">Seçiniz</option>
                             @foreach($productStatuses as $productStatus)
-                                <option value="{{ $productStatus->name }}">{{ __("productStatuses.".$productStatus->name) }}</option>
+                            <option value="{{ $productStatus->name }}">{{ __("productStatuses.".$productStatus->name) }}</option>
                             @endforeach
                         </select>
                         @error('product_status')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
                     </div>
+                    @if(!empty($rentFormProduct->count))
+                        <div class="form-group">
+                            <label for="count">Kaç Adet Çıkartalım</label>
+                            <input class="form-control @error('count') is-invalid @enderror" type="number" min="1" max="{{ $rentFormProduct->count }}" name="count" id="count" value="{{ old('count') ?? '' }}" placeholder="Kaç Adet Çıkartalım" required>
+                            @error('count')
+                            <span class="error invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    @endif
                     <div class="form-group">
                         <label for="description">Açıklama</label>
                         <input class="form-control @error('description') is-invalid @enderror" type="text" name="description" id="description" value="{{ old('description') ?? '' }}" placeholder="Açıklama">

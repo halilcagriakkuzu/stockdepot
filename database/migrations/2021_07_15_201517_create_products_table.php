@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->string('row_no')->nullable();
             $table->smallInteger('count')->nullable();
             $table->smallInteger('unavailable_count')->nullable();
+            $table->smallInteger('maintenance_count')->nullable();
             $table->text('description')->nullable();
             $table->decimal('buy_price')->nullable();
             $table->date('buy_date')->nullable();

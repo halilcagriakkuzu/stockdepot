@@ -162,10 +162,12 @@ class RentFormController extends Controller
         ];
         if (!empty($rentFormProduct->count) && $rentFormProduct->count > 0) {
             $isStockProduct = true;
-            if ($request->get('product_status') != 'IN_MAINTENANCE') {
+            if ($request->get('product_status') == 'IN_DEPOT') {
                 $product->unavailable_count -= $request->get('count');
-                $product->save();
+            } else if ($request->get('product_status') == 'IN_MAINTENANCE') {
+                $product->maintenance_count += $request->get('count');
             }
+            $product->save();
             $requestPayload['count'] = $request->get('count');
         }
         ProductTransaction::create($requestPayload);
@@ -175,7 +177,7 @@ class RentFormController extends Controller
                 $product->product_status_id = $status->id;
             }
 
-            if ($product->unavailable_count == 0) {
+            if ($product->unavailable_count == 0 || ($product->count - $product->maintenance_count == 0)) {
                 $rentFormProduct->deleted_by = Auth::user()->id;
                 $rentFormProduct->save();
                 $rentFormProduct->delete();

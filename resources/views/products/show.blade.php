@@ -31,7 +31,10 @@
                             <b>Toplam Stok Adedi</b> <a class="float-right">{{ $product->count }}</a>
                         </li>
                         <li class="list-group-item">
-                            <b>Kullanılabilir</b> <a class="float-right">{{ $product->count - $product->unavailable_count  }}</a>
+                            <b>Ölçü/Bakımdaki</b> <a class="float-right">{{ $product->maintenance_count }}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Kullanılabilir</b> <a class="float-right">{{ $product->count - $product->unavailable_count }}</a>
                         </li>
                     @endif
                     @if(!empty($product->serial_number))

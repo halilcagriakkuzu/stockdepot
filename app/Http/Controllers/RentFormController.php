@@ -91,6 +91,7 @@ class RentFormController extends Controller
             ->get();
         $products = Product::select('products.*', 'categories.name')
             ->join('categories', 'categories.id', 'products.category_id')
+            ->whereNull('categories.deleted_at')
             ->join('product_statuses', 'product_statuses.id', 'products.product_status_id')
             ->where('product_statuses.name', '!=', 'DISABLED')
             ->whereNotIn('products.id', $rentFormProducts->pluck('product_id'))
@@ -217,6 +218,7 @@ class RentFormController extends Controller
             ->get();
         $products = Product::select('products.*', 'categories.name')
             ->join('categories', 'categories.id', 'products.category_id')
+            ->whereNull('categories.deleted_at')
             ->join('product_statuses', 'product_statuses.id', 'products.product_status_id')
             ->where('product_statuses.name', '!=', 'DISABLED')
             ->whereNotIn('products.id', $rentFormProducts->pluck('product_id'))

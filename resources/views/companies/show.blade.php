@@ -41,7 +41,7 @@
                     </li>
                 </ul>
 
-                <a type="button" href="#" class="btn btn-block btn-info"><span class="fas fa-plus"></span> Kiralama Oluştur</a>
+                <a type="button" href="{{ route('rentForms.create') }}" class="btn btn-block btn-info"><span class="fas fa-plus"></span> Kiralama Oluştur</a>
                 <a type="button" href="{{ route('companies.edit', ['company' => $company]) }}" class="btn btn-block btn-warning"><span class="fas fa-pencil-alt"></span> Düzenle</a>
             </div>
             <!-- /.card-body -->
@@ -55,12 +55,24 @@
                 <h2>Kiralamalar <small class="text-muted">(En son kiralama en üstte)</small></h2>
                 <table class="table table-striped">
                     <thead>
-                        <th>id</th>
+                        <th>Id</th>
+                        <th>Muhatap</th>
+                        <th>Durum</th>
+                        <th>Formu Oluşturan</th>
+                        <th>Kiralama Tarihi</th>
                     </thead>
                     <tbody>
                     @foreach($rentForms as $rentForm)
                         <tr>
                             <td>{{ $rentForm->id }}</td>
+                            <td>{{ $rentForm->interlocutor_name }}</td>
+                            <td>
+                            <span class="badge badge-{{ $rentForm->rentFormStatus->color }}">
+                                    {{ __("rentFormStatuses.".$rentForm->rentFormStatus->name) }}
+                                </span>
+                            </td>
+                            <td>{{ $rentForm->createdBy->name }}</td>
+                            <td>{{ $rentForm->created_at->format('d/m/Y H:i') }}</td>
                         </tr>
                     @endforeach
                     </tbody>

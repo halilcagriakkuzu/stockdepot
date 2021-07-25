@@ -24,6 +24,7 @@ class RentFormProduct extends Model
         'deleted_by',
         'description',
         'count',
+        'is_removed',
     ];
 
     /**

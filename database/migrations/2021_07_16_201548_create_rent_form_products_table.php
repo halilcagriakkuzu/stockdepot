@@ -17,6 +17,7 @@ class CreateRentFormProductsTable extends Migration
             $table->id();
             $table->integer('count')->nullable();
             $table->string('description')->nullable();
+            $table->boolean('is_removed')->default(false);
             $table->timestamps();
             $table->softDeletes();
 

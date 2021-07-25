@@ -89,6 +89,7 @@
                             <th>Model</th>
                             <th>Adet</th>
                             <th>Açıklama</th>
+                            <th>Durumu</th>
                             <th>#</th>
                             </thead>
                             <tbody>
@@ -99,6 +100,7 @@
                                     <td>{{ $rentFormProduct->product->model }}</td>
                                     <td>{{ $rentFormProduct->count ?? "--" }}</td>
                                     <td>{{ $rentFormProduct->product->description }}</td>
+                                    <td>{{ $rentFormProduct->is_removed ? 'Kiradan Alındı' : 'Hala Kirada' }}</td>
                                     <td>
                                         <a type="button" target="_blank" href="{{ route('products.show', ['product' => $rentFormProduct->product->id]) }}" class="btn btn-primary"><span class="fas fa-search"></span> Malzeme Detayı</a>
                                         <a type="button" href="{{ route('rentForms.removeProductFromActiveRentForm', ['id' => $rentForm->id, 'productId' => $rentFormProduct->product->id]) }}" class="btn btn-danger"><span class="fas fa-minus"></span> Kiralamadan Al</a>

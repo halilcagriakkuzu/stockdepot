@@ -182,6 +182,7 @@ class RentFormController extends Controller
             if ($product->unavailable_count == 0 || ($product->count - $product->maintenance_count == 0)) {
                 $rentFormProduct->deleted_by = Auth::user()->id;
                 $rentFormProduct->is_removed = true;
+                $rentFormProduct->count -= $request->get('count');
                 $rentFormProduct->save();
             } else {
                 $rentFormProduct->count -= $request->get('count');

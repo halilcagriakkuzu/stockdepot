@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+        niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
 
         /*
          * Application Service Providers...

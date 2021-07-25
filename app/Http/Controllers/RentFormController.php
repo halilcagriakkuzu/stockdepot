@@ -13,9 +13,15 @@ use App\Models\RentFormStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use niklasravnsborg\LaravelPdf\Facades\Pdf as PDF;
 
 class RentFormController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -413,5 +419,17 @@ class RentFormController extends Controller
 
         Session::flash('success', 'Kiralama tamamlandı! Ürünler depoya gönderildi!');
         return redirect()->route('rentForms.index');
+    }
+
+    public function exportPdf($id)
+    {
+        $rentForm = RentForm::with('rentFormProducts')
+            ->with('rentFormStatus')
+            ->with('company')
+            ->with('createdBy')
+            ->findOrFail($id);
+
+        $pdf = PDF::loadView('pdf.rentForm', ['rentForm' => $rentForm]);
+        return $pdf->download('kiralama_formu.pdf');
     }
 }

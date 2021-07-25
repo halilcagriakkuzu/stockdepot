@@ -381,4 +381,37 @@ class RentFormController extends Controller
         $request->session()->flash('success', 'Kiralama aktifleştirildi!');
         return redirect()->route('rentForms.index');
     }
+
+    public function markAsDoneForm($id)
+    {
+        $rentForm = RentForm::with('rentFormProducts')
+            ->findOrFail($id);
+
+        foreach ($rentForm->rentFormProducts as $rentFormProduct) {
+            $action = Action::where('type', '=', 'RENT_BACK_FROM_COMPANY_TO_DEPOT')->firstOrFail();
+            $product = Product::findOrFail($rentFormProduct->product->id);
+            $requestPayload = [
+                'product_id' => $product->id,
+                'created_by' => Auth::user()->id,
+                'action_id' => $action->id,
+                'description' => $rentFormProduct->description,
+                'rent_form_id' => $rentForm->id
+            ];
+            if (!empty($rentFormProduct->count) && $rentFormProduct->count > 0) {
+                $product->unavailable_count -= $rentFormProduct->count;
+                $requestPayload['count'] = $rentFormProduct->count;
+            }
+            ProductTransaction::create($requestPayload);
+            $status = ProductStatus::where('name', '=', 'IN_DEPOT')->firstOrFail();
+            $product->product_status_id = $status->id;
+            $product->save();
+        }
+
+        $status = RentFormStatus::where('name', '=', 'DONE')->first();
+        $rentForm->rent_form_status_id = $status->id;
+        $rentForm->update();
+
+        Session::flash('success', 'Kiralama tamamlandı! Ürünler depoya gönderildi!');
+        return redirect()->route('rentForms.index');
+    }
 }

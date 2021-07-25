@@ -27,7 +27,7 @@
                             <h3 class="card-title">#{{ $rentForm->id }} {{ $rentForm->company->name }} kiralama formunun detayları</h3>
                             <div class="float-right">
                                 @if($rentForm->rentFormStatus->name == 'ACTIVE')
-                                    <a type="button" href="#" class="btn btn-info"><span class="fas fa-check"></span> Tamamlandı Olarak İşaretle</a>
+                                    <a type="button" href="{{ route('rentForms.markAsDoneForm', ['id' => $rentForm->id]) }}" class="btn btn-info"><span class="fas fa-check"></span> Tamamlandı Olarak İşaretle</a>
                                 @endif
                                 <a class="btn btn-success" href="#" type="button"><span class="fas fa-pdf"></span> PDF Çıktı Al</a>
                             </div>

@@ -16,7 +16,7 @@ class CreateRentFormStatusesTable extends Migration
         Schema::create('rent_form_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->string('color')->nullable();
         });
     }

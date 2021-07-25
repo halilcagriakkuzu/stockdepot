@@ -38,7 +38,7 @@ class RentFormController extends Controller
      */
     public function create()
     {
-        $companies = Company::all();
+        $companies = Company::where('is_active', '=', 1)->get();
 
         return view('rentForms.edit', [
             'new' => true,

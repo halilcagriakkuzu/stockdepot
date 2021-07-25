@@ -46,11 +46,11 @@
                 <table id="dt" class="table table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th>Seri No</th>
-                        <th>Kategori</th>
-                        <th>Marka</th>
-                        <th>Model</th>
-                        <th>Bakımdaki Adet</th>
+                        <th class="excel printable">Seri No</th>
+                        <th class="excel printable">Kategori</th>
+                        <th class="excel printable">Marka</th>
+                        <th class="excel printable">Model</th>
+                        <th class="excel printable">Bakımdaki Adet</th>
                         <th>#</th>
                     </tr>
                     </thead>
@@ -93,18 +93,52 @@
 
     <script>
         $(function () {
-            $('#dt').DataTable({
+            $("#dt").DataTable({
+                "responsive": true,
+                "searching": true,
+                "ordering": true,
+                "paging": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "info": true,
                 language: {
                     url: "{{asset('plugins/datatables/tr.json')}}"
                 },
-                "paging": true,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
+                initComplete: function(){
+                    var api = this.api();
+                    new $.fn.dataTable.Buttons(api, {
+                        buttons: [
+                            {
+                                extend: 'pdf',
+                                text: 'PDF',
+                                exportOptions: {
+                                    columns: '.printable',
+                                },
+                                customize: function (doc) {
+                                    doc.content[1].table.widths =
+                                        Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                                }
+                            },
+                            {
+                                extend: 'excel',
+                                text: 'Excel',
+                                exportOptions: {
+                                    columns: '.excel',
+                                }
+                            },
+                            {
+                                extend: 'print',
+                                text: 'Sayfayı Yazdır',
+                                autoPrint: true,
+                                exportOptions: {
+                                    columns: '.printable',
+                                }
+                            }
+                        ]
+                    });
+                    api.buttons().container().appendTo( '#dt_wrapper .col-md-6:eq(0)' );
+                }
+            })
         });
     </script>
 @endsection

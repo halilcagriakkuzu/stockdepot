@@ -28,17 +28,17 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <table id="users-dt" class="table table-bordered table-hover">
+                <table id="dt" class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>Id</th>
-                            <th>Kategori</th>
-                            <th>Seri No</th>
-                            <th>Marka</th>
-                            <th>Model</th>
-                            <th>Toplam Stok</th>
-                            <th>Kullanılabilir Stok</th>
-                            <th>Durum</th>
+                            <th class="excel">Id</th>
+                            <th class="printable excel">Kategori</th>
+                            <th class="printable excel">Seri No</th>
+                            <th class="printable excel">Marka</th>
+                            <th class="printable excel">Model</th>
+                            <th class="printable excel">Toplam Stok</th>
+                            <th class="printable excel">Kullanılabilir Stok</th>
+                            <th class="printable excel">Durum</th>
                             <th>#</th>
                         </tr>
                     </thead>
@@ -98,18 +98,52 @@
         });
 
         $(function () {
-            $('#users-dt').DataTable({
+            $("#dt").DataTable({
+                "responsive": true,
+                "searching": true,
+                "ordering": true,
+                "paging": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "info": true,
                 language: {
                     url: "{{asset('plugins/datatables/tr.json')}}"
                 },
-                "paging": true,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
+                initComplete: function(){
+                    var api = this.api();
+                    new $.fn.dataTable.Buttons(api, {
+                        buttons: [
+                            {
+                                extend: 'pdf',
+                                text: 'PDF',
+                                exportOptions: {
+                                    columns: '.printable',
+                                },
+                                customize: function (doc) {
+                                    doc.content[1].table.widths =
+                                        Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                                }
+                            },
+                            {
+                                extend: 'excel',
+                                text: 'Excel',
+                                exportOptions: {
+                                    columns: '.excel',
+                                }
+                            },
+                            {
+                                extend: 'print',
+                                text: 'Sayfayı Yazdır',
+                                autoPrint: true,
+                                exportOptions: {
+                                    columns: '.printable',
+                                }
+                            }
+                        ]
+                    });
+                    api.buttons().container().appendTo( '#dt_wrapper .col-md-6:eq(0)' );
+                }
+            })
         });
     </script>
 @endsection

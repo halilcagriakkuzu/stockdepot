@@ -93,6 +93,7 @@ class ProductController extends Controller
             ->firstOrFail();
         $transactions = ProductTransaction::with('rentForm')
             ->with('createdBy')
+            ->with('rentForm')
             ->where('product_id', '=', $id)
             ->orderBy('created_at', 'DESC')
             ->get();

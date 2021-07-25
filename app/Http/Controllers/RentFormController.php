@@ -159,7 +159,8 @@ class RentFormController extends Controller
             'product_id' => $product->id,
             'created_by' => Auth::user()->id,
             'action_id' => $action->id,
-            'description' => $request->get('description')
+            'description' => $request->get('description'),
+            'rent_form_id' => $rentForm->id
         ];
         if (!empty($rentFormProduct->count) && $rentFormProduct->count > 0) {
             $isStockProduct = true;
@@ -272,7 +273,8 @@ class RentFormController extends Controller
                 'product_id' => $product->id,
                 'created_by' => Auth::user()->id,
                 'action_id' => $action->id,
-                'description' => $request->get('description')
+                'description' => $request->get('description'),
+                'rent_form_id' => $rentForm->id
             ];
             if (array_key_exists('count', $validated) && $validated['count'] > 0) {
                 $isStockProduct = true;
@@ -352,7 +354,8 @@ class RentFormController extends Controller
                 'product_id' => $product->id,
                 'created_by' => Auth::user()->id,
                 'action_id' => $actionRented->id,
-                'description' => $rentFormProduct->description
+                'description' => $rentFormProduct->description,
+                'rent_form_id' => $rentForm->id
             ];
             if (!empty($rentFormProduct->count) && $rentFormProduct->count > 0) {
                 $isStockProduct = true;

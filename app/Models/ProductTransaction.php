@@ -18,6 +18,7 @@ class ProductTransaction extends Model
      */
     protected $fillable = [
         'product_id',
+        'rent_form_id',
         'created_by',
         'action_id',
         'description',

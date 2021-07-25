@@ -103,7 +103,21 @@
                             <td>{{ __("actions.".$transaction->action->type) }}</td>
                             <td>{{ $transaction->count ?? 1}}</td>
                             <td>{{ $transaction->description }}</td>
-                            <td>@if(!empty($transaction->rentForm)) {{ $transaction->rentForm->company->name }}#{{ $transaction->rentForm->id }} @else -- @endif</td>
+                            <td>
+                                @if(!empty($transaction->rentForm))
+                                    @if($transaction->rentForm->rentFormStatus->name == 'ACTIVE')
+                                        <a href="{{ route('rentForms.show', ['rentForm' => $transaction->rentForm->id]) }}">
+                                            {{ $transaction->rentForm->company->name }}#{{ $transaction->rentForm->id }}
+                                        </a>
+                                    @else
+                                        <a href="{{ route('rentForms.edit', ['rentForm' => $transaction->rentForm->id]) }}">
+                                            {{ $transaction->rentForm->company->name }}#{{ $transaction->rentForm->id }}
+                                        </a>
+                                    @endif
+                                @else
+                                    --
+                                @endif
+                            </td>
                             <td>{{ $transaction->created_at->format('d/m/Y H:i') }}</td>
                             <td>{{ $transaction->createdBy->name }}</td>
                         </tr>

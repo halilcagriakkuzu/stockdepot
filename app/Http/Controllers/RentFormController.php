@@ -95,7 +95,7 @@ class RentFormController extends Controller
             ->with('updatedBy')
             ->where('rent_form_id', '=', $rentForm->id)
             ->get();
-        $products = Product::select('products.*', 'categories.name')
+        $products = Product::select('products.*')
             ->join('categories', 'categories.id', 'products.category_id')
             ->whereNull('categories.deleted_at')
             ->join('product_statuses', 'product_statuses.id', 'products.product_status_id')
@@ -223,7 +223,7 @@ class RentFormController extends Controller
             ->with('product')
             ->where('rent_form_id', '=', $rentForm->id)
             ->get();
-        $products = Product::select('products.*', 'categories.name')
+        $products = Product::select('products.*')
             ->join('categories', 'categories.id', 'products.category_id')
             ->whereNull('categories.deleted_at')
             ->join('product_statuses', 'product_statuses.id', 'products.product_status_id')

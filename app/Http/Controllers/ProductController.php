@@ -30,6 +30,7 @@ class ProductController extends Controller
         $products = Product::with('productStatus')
             ->join('categories', 'categories.id', 'products.category_id')
             ->whereNull('categories.deleted_at')
+            ->select('products.*')
             ->get();
         return view('products.index', [
             'products' => $products

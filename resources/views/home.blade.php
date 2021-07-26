@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title') Deneme @endsection
+@section('title') Anasayfa @endsection
 
-@section('content-title') Deneme @endsection
+@section('content-title') Anasayfa @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item active">Deneme</li>
+    <li class="breadcrumb-item active">Anasayfa</li>
 @endsection
 
 @section('content')
@@ -20,8 +20,8 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
-                    {{ __('Giriş yapıldı!') }}
+                    <p>Giriş yapıldı. Hoşgeldiniz.</p>
+                    <p>Sol menüden istediğiniz bölümü kullanabilirsiniz.</p>
                 </div>
             </div>
         </div>

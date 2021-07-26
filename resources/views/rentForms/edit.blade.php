@@ -29,6 +29,9 @@
     <link rel="stylesheet" href="{{asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
     <link rel="stylesheet" href="{{asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
     <link rel="stylesheet" href="{{asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{asset('plugins/select2/css/select2.min.css')}}">
+    <link rel="stylesheet" href="{{asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
 @endsection
 
 @section('content')
@@ -68,7 +71,7 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="company_id">Firma <i class="text-danger">*</i></label>
-                        <select class="form-control  @error('company_id') is-invalid @enderror" name="company_id" id="company_id" required>
+                        <select class="form-control select2bs4 @error('company_id') is-invalid @enderror" name="company_id" id="company_id" required>
                             <option value="">Seçiniz</option>
                             @foreach($companies as $company)
                                 <option value="{{ $company->id }}" @if(!empty($rentForm) && $company->id === $rentForm->company->id ?? 0) selected @endif>{{ $company->name }}</option>
@@ -231,9 +234,14 @@
     <script src="{{asset('plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
     <script src="{{asset('plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
     <script src="{{asset('plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
-
+    <!-- Select2 -->
+    <script src="{{asset('plugins/select2/js/select2.full.min.js')}}"></script>
     <script>
         $(function () {
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            })
+
             $(".delete").on("submit", function(){
                 return confirm("Bu taslağı silmek istediğinden emin misin?");
             });

@@ -34,7 +34,7 @@
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
             <!-- Navbar Search -->
-            <li class="nav-item">
+            <li class="nav-item d-none">
                 <a class="nav-link" data-widget="navbar-search" href="#" role="button">
                     <i class="fas fa-search"></i>
                 </a>
@@ -94,7 +94,7 @@
             </div>
 
             <!-- SidebarSearch Form -->
-            <div class="form-inline">
+            <div class="form-inline d-none">
                 <div class="input-group" data-widget="sidebar-search">
                     <input class="form-control form-control-sidebar" type="search" placeholder="Ara"
                            aria-label="Ara">
@@ -197,8 +197,8 @@
                             <p>Firmalar</p>
                         </a>
                     </li>
-                    <li class="nav-header">Raporlar</li>
-                    <li class="nav-item">
+                    <li class="nav-header d-none">Raporlar</li>
+                    <li class="nav-item d-none">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-chart-pie"></i>
                             <p>
@@ -215,7 +215,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item d-none">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-chart-pie"></i>
                             <p>

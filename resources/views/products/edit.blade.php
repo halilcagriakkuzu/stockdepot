@@ -28,6 +28,9 @@
 @section('css')
     <!-- Tempusdominus Bootstrap 4 -->
     <link rel="stylesheet" href="{{asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{asset('plugins/select2/css/select2.min.css')}}">
+    <link rel="stylesheet" href="{{asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
 @endsection
 
 @section('content')
@@ -53,10 +56,10 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="category_id">Kategori <i class="text-danger">*</i></label>
-                        <select class="form-control  @error('category_id') is-invalid @enderror" name="category_id" id="category_id" required>
+                        <select class="form-control select2bs4  @error('category_id') is-invalid @enderror" name="category_id" id="category_id" required>
                             <option value="">Seçiniz</option>
                             @foreach($categories as $category)
-                                <option value="{{ $category->id }}" @if(!empty($product) && $category->id === $product->category->id ?? 0) selected @endif>{{ $category->name }}</option>
+                                <option value="{{ $category->id }}" @if(!empty($product) && $category->id === $product->category->id ?? 0) selected @endif>{{ $category->name }} / {{ $category->depot->name }}</option>
                             @endforeach
                         </select>
                         @error('category_id')
@@ -163,9 +166,14 @@
     <!-- Tempusdominus Bootstrap 4 -->
     <script src="{{asset('plugins/moment/moment.min.js')}}"></script>
     <script src="{{asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
-
+    <!-- Select2 -->
+    <script src="{{asset('plugins/select2/js/select2.full.min.js')}}"></script>
     <script>
         $(function () {
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            })
+
             $('#buy_date').datetimepicker({
                 locale: 'tr',
                 format: 'DD/MM/YYYY'

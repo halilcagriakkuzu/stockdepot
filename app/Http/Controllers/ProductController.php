@@ -146,7 +146,9 @@ class ProductController extends Controller
             'buy_date' => 'nullable',
         ]);
 
-        $validated['buy_date'] = date_create_from_format("d/m/Y", $validated['buy_date']);
+        if (array_key_exists('buy_date', $validated) && !empty($validated['buy_date'])) {
+            $validated['buy_date'] = date_create_from_format("d/m/Y", $validated['buy_date']);
+        }
 
         $product->update($validated);
         $request->session()->flash('success', 'Malzeme başarıyla düzenlendi!');

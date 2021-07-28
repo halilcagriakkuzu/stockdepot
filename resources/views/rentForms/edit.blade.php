@@ -56,6 +56,7 @@
                         @elseif($rentForm->rentFormStatus->name == 'ACTIVE')
                             <a type="button" href="#" class="btn btn-info"><span class="fas fa-check"></span> Tamamlandı Olarak İşaretle</a>
                         @endif
+                            <a class="btn btn-success" href="{{ route('rentForms.exportPdf', ['id' => $rentForm->id]) }}" type="button"><span class="fas fa-pdf"></span> PDF Çıktı Al</a>
                     @endif
                 </div>
             </div>

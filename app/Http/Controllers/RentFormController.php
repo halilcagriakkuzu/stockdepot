@@ -90,10 +90,11 @@ class RentFormController extends Controller
             ->where('rent_forms.id', '=', $id)
             ->firstOrFail();
         $rentFormProducts = RentFormProduct::with('rentForm')
-            ->with('product')
             ->with('createdBy')
             ->with('updatedBy')
+            ->join('products', 'products.id', 'rent_form_products.product_id')
             ->where('rent_form_id', '=', $rentForm->id)
+            ->whereNull('products.deleted_at')
             ->get();
         $products = Product::select('products.*')
             ->join('categories', 'categories.id', 'products.category_id')
@@ -390,32 +391,39 @@ class RentFormController extends Controller
 
     public function markAsDoneForm($id)
     {
-        $rentForm = RentForm::with('rentFormProducts')
-            ->findOrFail($id);
+        $rentForm = RentForm::findOrFail($id);
 
-        foreach ($rentForm->rentFormProducts as $rentFormProduct) {
-            $action = Action::where('type', '=', 'RENT_BACK_FROM_COMPANY_TO_DEPOT')->firstOrFail();
-            $product = Product::findOrFail($rentFormProduct->product->id);
-            $requestPayload = [
-                'product_id' => $product->id,
-                'created_by' => Auth::user()->id,
-                'action_id' => $action->id,
-                'description' => $rentFormProduct->description,
-                'rent_form_id' => $rentForm->id
-            ];
-            if (!empty($rentFormProduct->count) && $rentFormProduct->count > 0) {
-                $product->unavailable_count -= $rentFormProduct->count;
-                $requestPayload['count'] = $rentFormProduct->count;
+        $rentFormProducts = RentFormProduct::select('rent_form_products.*')
+            ->join('products', 'products.id', 'rent_form_products.product_id')
+            ->whereNull('products.deleted_at')->get();
+
+        foreach ($rentFormProducts as $rentFormProduct) {
+            if ($rentFormProduct->is_removed === 0) {
+                $action = Action::where('type', '=', 'RENT_BACK_FROM_COMPANY_TO_DEPOT')->firstOrFail();
+                $product = Product::findOrFail($rentFormProduct->product->id);
+                $requestPayload = [
+                    'product_id' => $product->id,
+                    'created_by' => Auth::user()->id,
+                    'action_id' => $action->id,
+                    'description' => $rentFormProduct->description,
+                    'rent_form_id' => $rentForm->id
+                ];
+                if (!empty($rentFormProduct->count) && $rentFormProduct->count > 0) {
+                    $product->unavailable_count -= $rentFormProduct->count;
+                    $requestPayload['count'] = $rentFormProduct->count;
+                }
+                ProductTransaction::create($requestPayload);
+                $status = ProductStatus::where('name', '=', 'IN_DEPOT')->firstOrFail();
+                $product->product_status_id = $status->id;
+                $product->save();
+                $rentFormProduct->is_removed = 1;
+                $rentFormProduct->save();
             }
-            ProductTransaction::create($requestPayload);
-            $status = ProductStatus::where('name', '=', 'IN_DEPOT')->firstOrFail();
-            $product->product_status_id = $status->id;
-            $product->save();
         }
 
-        $status = RentFormStatus::where('name', '=', 'DONE')->first();
+        $status = RentFormStatus::where('name', '=', 'DONE')->firstOrFail();
         $rentForm->rent_form_status_id = $status->id;
-        $rentForm->update();
+        $rentForm->save();
 
         Session::flash('success', 'Kiralama tamamlandı! Ürünler depoya gönderildi!');
         return redirect()->route('rentForms.index');

@@ -103,7 +103,9 @@
                                     <td>{{ $rentFormProduct->is_removed ? 'Kiradan Alındı' : 'Hala Kirada' }}</td>
                                     <td>
                                         <a type="button" target="_blank" href="{{ route('products.show', ['product' => $rentFormProduct->product->id]) }}" class="btn btn-primary"><span class="fas fa-search"></span> Malzeme Detayı</a>
-                                        <a type="button" href="{{ route('rentForms.removeProductFromActiveRentForm', ['id' => $rentForm->id, 'productId' => $rentFormProduct->product->id]) }}" class="btn btn-danger"><span class="fas fa-minus"></span> Kiralamadan Al</a>
+                                        @if(!$rentFormProduct->is_removed)
+                                            <a type="button" href="{{ route('rentForms.removeProductFromActiveRentForm', ['id' => $rentForm->id, 'productId' => $rentFormProduct->product->id]) }}" class="btn btn-sm btn-danger"><span class="fas fa-minus"></span> Kiralamadan Al</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -113,6 +115,7 @@
                             <p class="alert alert-info">Bu kiralamada bir malzeme kalmadı. Kiralamayı tamamlayabilirsiniz yada yeni bir malzeme ekleyerek devam ettirebilirsiniz.</p>
                         @endif
                         <hr>
+                        @if($rentForm->rentFormStatus->name != 'DONE')
                         <h3>Kiraya yeni malzeme gönder</h3>
                         <table id="dt" class="table table-bordered table-hover">
                             <thead>
@@ -149,7 +152,7 @@
                             @endforeach
                             </tbody>
                         </table>
-
+                        @endif
                     </div>
                 </div>
         </div>

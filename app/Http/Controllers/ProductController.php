@@ -74,6 +74,9 @@ class ProductController extends Controller
         ]);
 
         $validated['product_status_id'] = ProductStatus::where('name', '=', Product::STATUS_IN_DEPOT)->first()->id;
+        if (array_key_exists('buy_date', $validated) && !empty($validated['buy_date'])) {
+            $validated['buy_date'] = date_create_from_format("d/m/Y", $validated['buy_date']);
+        }
 
         $product = Product::create($validated);
         $request->session()->flash('success', 'Malzeme başarıyla oluşturuldu!');

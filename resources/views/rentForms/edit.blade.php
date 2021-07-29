@@ -168,7 +168,9 @@
                                     <td>{{ $rentFormProduct->count ?? "--" }}</td>
                                     <td>{{ $rentFormProduct->product->description }}</td>
                                     <td>
-                                        <a type="button" href="{{ route('rentForms.removeProductFromRentForm', ['id' => $rentForm->id, 'productId' => $rentFormProduct->product->id]) }}" class="btn btn-block btn-danger"><span class="fas fa-minus"></span> Formdan Çıkart</a>
+                                        @if(!$rentFormProduct->is_removed)
+                                            <a type="button" href="{{ route('rentForms.removeProductFromRentForm', ['id' => $rentForm->id, 'productId' => $rentFormProduct->product->id]) }}" class="btn btn-sm btn-danger"><span class="fas fa-minus"></span> Formdan Çıkart</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

@@ -94,7 +94,7 @@
 
     <script>
         $(".delete").on("submit", function(){
-            return confirm("Bu kaydı silmek istediğinden emin misin?");
+            return confirm("Bu kaydı silmek istediğinden emin misin? Bu ürünleri kullandığımız kiralamalar bundan etkilenecektir!silmek");
         });
 
         $(function () {

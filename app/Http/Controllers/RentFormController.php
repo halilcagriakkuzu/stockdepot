@@ -29,8 +29,11 @@ class RentFormController extends Controller
      */
     public function index()
     {
-        $rentForms = RentForm::with('company')
+        $rentForms = RentForm::with('createdBy')
             ->with('createdBy')
+            ->join('companies', 'companies.id', 'rent_forms.company_id')
+            ->whereNull('companies.deleted_at')
+            ->select('rent_forms.*')
             ->get();
         return view('rentForms.index', [
             'rentForms' => $rentForms

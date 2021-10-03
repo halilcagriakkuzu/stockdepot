@@ -81,7 +81,7 @@
 
     <script>
         $(".delete").on("submit", function(){
-            return confirm("Bu kaydı silmek istediğinden emin misin?");
+            return confirm("Bu kaydı silmek istediğinden emin misin? Bu kategoriye bağlı tüm ürünler bundan etkilenecektir!");
         });
 
         $(function () {

@@ -35,7 +35,7 @@ class RentForm extends Model
      */
     public function company(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class)->withTrashed();
     }
 
     /**
@@ -62,7 +62,7 @@ class RentForm extends Model
      */
     public function rentFormProducts(): HasMany
     {
-        return $this->hasMany(RentFormProduct::class);
+        return $this->hasMany(RentFormProduct::class)->withTrashed();
     }
 
     /**
@@ -71,7 +71,7 @@ class RentForm extends Model
      */
     public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by')->withTrashed();
     }
 
     /**
@@ -80,6 +80,6 @@ class RentForm extends Model
      */
     public function updatedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'updated_by');
+        return $this->belongsTo(User::class, 'updated_by')->withTrashed();
     }
 }

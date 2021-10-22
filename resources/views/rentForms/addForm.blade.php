@@ -93,7 +93,7 @@
                     @endif
                     <div class="form-group">
                         <label for="description">Açıklama</label>
-                        <input class="form-control @error('description') is-invalid @enderror" type="text" name="description" id="description" value="{{ old('description') ?? '' }}" placeholder="Açıklama">
+                        <input class="form-control @error('description') is-invalid @enderror" autocomplete="form-desc" type="text" name="description" id="description" value="{{ old('description') ?? '' }}" placeholder="Açıklama">
                         @error('description')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror

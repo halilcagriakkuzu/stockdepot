@@ -69,7 +69,7 @@
 
                     <div class="form-group">
                         <label for="serial_number">Seri Numarası</label>
-                        <input class="form-control @error('serial_number') is-invalid @enderror" type="text" name="serial_number" id="serial_number" value="{{ old('serial_number') ?? $product->serial_number ?? '' }}" placeholder="Seri Numarası">
+                        <input class="form-control @error('serial_number') is-invalid @enderror" type="text" autocomplete="prod-serial" name="serial_number" id="serial_number" value="{{ old('serial_number') ?? $product->serial_number ?? '' }}" placeholder="Seri Numarası">
                         @error('serial_number')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
@@ -77,7 +77,7 @@
 
                     <div class="form-group">
                         <label for="make">Marka <i class="text-danger">*</i></label>
-                        <input class="form-control @error('make') is-invalid @enderror" type="text" name="make" id="make" value="{{ old('make') ?? $product->make ?? '' }}" placeholder="Marka" required>
+                        <input class="form-control @error('make') is-invalid @enderror" type="text" autocomplete="prod-make" name="make" id="make" value="{{ old('make') ?? $product->make ?? '' }}" placeholder="Marka" required>
                         @error('make')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
@@ -85,7 +85,7 @@
 
                     <div class="form-group">
                         <label for="model">Model <i class="text-danger">*</i></label>
-                        <input class="form-control @error('model') is-invalid @enderror" type="text" name="model" id="model" value="{{ old('model') ?? $product->model ?? '' }}" placeholder="Model"required >
+                        <input class="form-control @error('model') is-invalid @enderror" type="text" autocomplete="prod-model" name="model" id="model" value="{{ old('model') ?? $product->model ?? '' }}" placeholder="Model"required >
                         @error('model')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
@@ -93,7 +93,7 @@
 
                     <div class="form-group">
                         <label for="shelf_no">Raf Numarası</label>
-                        <input class="form-control @error('shelf_no') is-invalid @enderror" type="text" name="shelf_no" id="shelf_no" value="{{ old('shelf_no') ?? $product->shelf_no ?? '' }}" placeholder="Raf Numarası">
+                        <input class="form-control @error('shelf_no') is-invalid @enderror" type="text" autocomplete="prod-shelf" name="shelf_no" id="shelf_no" value="{{ old('shelf_no') ?? $product->shelf_no ?? '' }}" placeholder="Raf Numarası">
                         @error('shelf_no')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
@@ -101,7 +101,7 @@
 
                     <div class="form-group">
                         <label for="row_no">Sıra Numarası</label>
-                        <input class="form-control @error('row_no') is-invalid @enderror" type="text" name="row_no" id="row_no" value="{{ old('row_no') ?? $product->row_no ?? '' }}" placeholder="Sıra Numarası">
+                        <input class="form-control @error('row_no') is-invalid @enderror" type="text" autocomplete="prod-row" name="row_no" id="row_no" value="{{ old('row_no') ?? $product->row_no ?? '' }}" placeholder="Sıra Numarası">
                         @error('row_no')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
@@ -109,7 +109,7 @@
 
                     <div class="form-group">
                         <label for="count">Adet (<i>Sadece adetle satılan malzemeler için giriniz.</i>)</label>
-                        <input class="form-control @error('count') is-invalid @enderror" type="text" name="count" id="count" value="{{ old('count') ?? $product->count ?? '' }}" placeholder="Adet">
+                        <input class="form-control @error('count') is-invalid @enderror" type="text" autocomplete="prod-count" name="count" id="count" value="{{ old('count') ?? $product->count ?? '' }}" placeholder="Adet">
                         @error('count')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
@@ -117,7 +117,7 @@
 
                     <div class="form-group">
                         <label for="description">Açıklama</label>
-                        <input class="form-control @error('description') is-invalid @enderror" type="text" name="description" id="description" value="{{ old('description') ?? $product->description ?? '' }}" placeholder="Açıklama">
+                        <input class="form-control @error('description') is-invalid @enderror" type="text" autocomplete="prod-desc" name="description" id="description" value="{{ old('description') ?? $product->description ?? '' }}" placeholder="Açıklama">
                         @error('description')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
@@ -125,7 +125,7 @@
 
                     <div class="form-group">
                         <label for="buy_price">Satın Alma Fiyatı ($)</label>
-                        <input class="form-control @error('buy_price') is-invalid @enderror" type="text" name="buy_price" id="buy_price" value="{{ old('buy_price') ?? $product->buy_price ?? '' }}" placeholder="Satın Alma fiyatı">
+                        <input class="form-control @error('buy_price') is-invalid @enderror" type="text" autocomplete="prod-price" name="buy_price" id="buy_price" value="{{ old('buy_price') ?? $product->buy_price ?? '' }}" placeholder="Satın Alma fiyatı">
                         @error('buy_price')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
@@ -134,7 +134,7 @@
                     <div class="form-group">
                         <label>Satın Alma Tarihi:</label>
                         <div class="input-group date" id="buy_date" data-target-input="nearest">
-                            <input type="text" name="buy_date" class="form-control datetimepicker-input @error('buy_date') is-invalid @enderror" data-target="#buy_date" value="@if(!empty(old('buy_date'))) {{ old('buy_date') }} @elseif(!empty($product) && !empty($product->buy_date)) {{ $product->buy_date->format('d/m/Y') }} @endif"/>
+                            <input type="text" autocomplete="prod-date" name="buy_date" class="form-control datetimepicker-input @error('buy_date') is-invalid @enderror" data-target="#buy_date" value="@if(!empty(old('buy_date'))) {{ old('buy_date') }} @elseif(!empty($product) && !empty($product->buy_date)) {{ $product->buy_date->format('d/m/Y') }} @endif"/>
                             <div class="input-group-append" data-target="#buy_date" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>

@@ -51,7 +51,7 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="name">İsim Soyisim <i class="text-danger">*</i></label>
-                        <input class="form-control @error('name') is-invalid @enderror" type="text" name="name" id="name" value="{{ old('name') ?? $user->name ?? '' }}" placeholder="İsim Soyisim" required>
+                        <input class="form-control @error('name') is-invalid @enderror" type="text" autocomplete="user-name" name="name" id="name" value="{{ old('name') ?? $user->name ?? '' }}" placeholder="İsim Soyisim" required>
                         @error('name')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
@@ -59,7 +59,7 @@
 
                     <div class="form-group">
                         <label for="email">Eposta <i class="text-danger">*</i></label>
-                        <input class="form-control @error('email') is-invalid @enderror" type="email" name="email" id="email" value="{{ old('email') ?? $user->email ?? '' }}" placeholder="Eposta" required>
+                        <input class="form-control @error('email') is-invalid @enderror" type="email" autocomplete="user-email" name="email" id="email" value="{{ old('email') ?? $user->email ?? '' }}" placeholder="Eposta" required>
                         @error('email')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror

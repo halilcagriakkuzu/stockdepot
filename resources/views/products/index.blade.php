@@ -36,8 +36,8 @@
                             <th class="printable excel">Seri No</th>
                             <th class="printable excel">Marka</th>
                             <th class="printable excel">Model</th>
-                            <th class="printable excel">Toplam Stok</th>
-                            <th class="printable excel">Kullanılabilir Stok</th>
+                            <th class="printable excel">Raf No</th>
+                            <th class="printable excel">Sıra No</th>
                             <th class="printable excel">Durum</th>
                             <th>#</th>
                         </tr>
@@ -50,7 +50,8 @@
                             <td>{{ $product->serial_number }}</td>
                             <td>{{ $product->make }}</td>
                             <td>{{ $product->model }}</td>
-                            <td>{{ $product->count ?? '--' }}</td>
+                            <td>{{ $product->shelf_no }}</td>
+                            <td>{{ $product->row_no }}</td>
                             <td>@if(!empty($product->count)) {{ $product->count - $product->unavailable_count }} @else -- @endif</td>
                             <td>
                                 <span class="badge badge-{{ $product->productStatus->color }}">

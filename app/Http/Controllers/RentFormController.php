@@ -30,9 +30,7 @@ class RentFormController extends Controller
     public function index()
     {
         $rentForms = RentForm::with('createdBy')
-            ->with('createdBy')
-            ->join('companies', 'companies.id', 'rent_forms.company_id')
-            ->whereNull('companies.deleted_at')
+            ->with('company')
             ->select('rent_forms.*')
             ->get();
         return view('rentForms.index', [
@@ -95,13 +93,11 @@ class RentFormController extends Controller
         $rentFormProducts = RentFormProduct::with('rentForm')
             ->with('createdBy')
             ->with('updatedBy')
-            ->join('products', 'products.id', 'rent_form_products.product_id')
+            ->with('product')
             ->where('rent_form_id', '=', $rentForm->id)
-            ->whereNull('products.deleted_at')
             ->get();
         $products = Product::select('products.*')
-            ->join('categories', 'categories.id', 'products.category_id')
-            ->whereNull('categories.deleted_at')
+            ->with('category')
             ->join('product_statuses', 'product_statuses.id', 'products.product_status_id')
             ->where('product_statuses.name', '!=', 'DISABLED')
             ->whereNotIn('products.id', $rentFormProducts->pluck('product_id'))

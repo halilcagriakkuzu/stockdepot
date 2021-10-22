@@ -30,7 +30,7 @@ class Category extends Model
      */
     public function depot(): BelongsTo
     {
-        return $this->belongsTo(Depot::class);
+        return $this->belongsTo(Depot::class)->withTrashed();
     }
 
     /**

@@ -33,7 +33,10 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Sistemde kayıtlı @if(!empty($depot)) {{ $depot->name }} @else Ölçü/Bakım @endif malzemeleri</h3>
+                <h3 class="card-title">
+                    Sistemde kayıtlı @if(!empty($depot)) {{ $depot->name }} @else Ölçü/Bakım @endif malzemeleri. <br>
+                    Burada sadece durumu <span class="badge badge-success">Depoda</span> olan malzemeler listelenir.
+                </h3>
                 @if(!empty($depot))
                     <div class="float-right">
                         <a type="button" href="{{ route('products.create') }}" class="btn btn-success"><span class="fas fa-plus"></span> Yeni Malzeme Oluştur</a>

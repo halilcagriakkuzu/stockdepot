@@ -51,7 +51,7 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="name">Depo Adı <i class="text-danger">*</i></label>
-                        <input class="form-control @error('name') is-invalid @enderror" type="text" name="name" id="name" value="{{ old('name') ?? $depot->name ?? '' }}" placeholder="Depo Adı" required>
+                        <input class="form-control @error('name') is-invalid @enderror" type="text" autocomplete="depot-name" name="name" id="name" value="{{ old('name') ?? $depot->name ?? '' }}" placeholder="Depo Adı" required>
                         @error('name')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
@@ -59,7 +59,7 @@
 
                     <div class="form-group">
                         <label for="description">Açıklama</label>
-                        <input class="form-control @error('description') is-invalid @enderror" type="text" name="description" id="description" value="{{ old('description') ?? $depot->description ?? '' }}" placeholder="Açıklama">
+                        <input class="form-control @error('description') is-invalid @enderror" type="text" autocomplete="depot-description" name="description" id="description" value="{{ old('description') ?? $depot->description ?? '' }}" placeholder="Açıklama">
                         @error('description')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror

@@ -51,7 +51,7 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="name">Firma Adı <i class="text-danger">*</i></label>
-                        <input class="form-control @error('name') is-invalid @enderror" type="text" name="name" id="name" value="{{ old('name') ?? $company->name ?? '' }}" placeholder="Firma Adı" required>
+                        <input class="form-control @error('name') is-invalid @enderror" type="text" autocomplete="company-name" name="name" id="name" value="{{ old('name') ?? $company->name ?? '' }}" placeholder="Firma Adı" required>
                         @error('name')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror

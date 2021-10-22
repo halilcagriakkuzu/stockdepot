@@ -85,7 +85,7 @@
 
                     <div class="form-group">
                         <label for="interlocutor_name">Muhatap İsmi <i class="text-danger">*</i></label>
-                        <input class="form-control @error('interlocutor_name') is-invalid @enderror" type="text" name="interlocutor_name" id="interlocutor_name" value="{{ old('interlocutor_name') ?? $rentForm->interlocutor_name ?? '' }}" placeholder="Muhatap İsmi" required>
+                        <input class="form-control @error('interlocutor_name') is-invalid @enderror" autocomplete="form-inter-name" type="text" name="interlocutor_name" id="interlocutor_name" value="{{ old('interlocutor_name') ?? $rentForm->interlocutor_name ?? '' }}" placeholder="Muhatap İsmi" required>
                         @error('interlocutor_name')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
@@ -93,7 +93,7 @@
 
                     <div class="form-group">
                         <label for="interlocutor_email">Muhatap Eposta <i class="text-danger">*</i></label>
-                        <input class="form-control @error('interlocutor_email') is-invalid @enderror" type="email" name="interlocutor_email" id="interlocutor_email" value="{{ old('interlocutor_email') ?? $rentForm->interlocutor_email ?? '' }}" placeholder="Muhatap Eposta" required>
+                        <input class="form-control @error('interlocutor_email') is-invalid @enderror" type="email" autocomplete="form-inter-mail" name="interlocutor_email" id="interlocutor_email" value="{{ old('interlocutor_email') ?? $rentForm->interlocutor_email ?? '' }}" placeholder="Muhatap Eposta" required>
                         @error('interlocutor_email')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
@@ -101,7 +101,7 @@
 
                     <div class="form-group">
                         <label for="interlocutor_phone">Muhatap Telefon <i class="text-danger">*</i></label>
-                        <input class="form-control @error('interlocutor_phone') is-invalid @enderror" type="text" name="interlocutor_phone" id="interlocutor_phone" value="{{ old('interlocutor_phone') ?? $rentForm->interlocutor_phone ?? '' }}" placeholder="Muhatap Telefon" required>
+                        <input class="form-control @error('interlocutor_phone') is-invalid @enderror" type="text" autocomplete="form-inter-phone" name="interlocutor_phone" id="interlocutor_phone" value="{{ old('interlocutor_phone') ?? $rentForm->interlocutor_phone ?? '' }}" placeholder="Muhatap Telefon" required>
                         @error('interlocutor_phone')
                         <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
@@ -110,7 +110,7 @@
                     <div class="form-group row">
                         <div class="col-10">
                             <label for="price">Fiyat <i>(Sonradan girilebilir)</i></label>
-                            <input class="form-control @error('price') is-invalid @enderror" type="text" name="price" id="price" value="{{ old('price') ?? $rentForm->price ?? '' }}" placeholder="Fiyat">
+                            <input class="form-control @error('price') is-invalid @enderror" type="text" autocomplete="form-inter-price" name="price" id="price" value="{{ old('price') ?? $rentForm->price ?? '' }}" placeholder="Fiyat">
                             @error('price')
                             <span class="error invalid-feedback">{{ $message }}</span>
                             @enderror
